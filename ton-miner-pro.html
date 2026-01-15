@@ -13,6 +13,7 @@
             --warning: #ffcc00;
             --dark: #0a0a0a;
             --darker: #050505;
+            --premium: #ffd700;
         }
         
         * {
@@ -191,6 +192,168 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        /* ТАБЛИЦЫ (ТОП И КЛАНЫ) */
+        .leaderboard {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .leaderboard-header {
+            background: rgba(0,136,204,0.3);
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            align-items: center;
+        }
+        
+        .leaderboard-item:nth-child(even) {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .player-rank {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,136,204,0.3);
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        
+        .player-rank.top1 { background: linear-gradient(135deg, gold, orange); color: black; }
+        .player-rank.top2 { background: linear-gradient(135deg, silver, gray); color: black; }
+        .player-rank.top3 { background: linear-gradient(135deg, #cd7f32, #8b4513); color: white; }
+        
+        .player-info {
+            flex: 1;
+            margin-left: 15px;
+        }
+        
+        .player-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        
+        .player-clan {
+            font-size: 0.8em;
+            color: #88aaff;
+        }
+        
+        .player-ton {
+            font-weight: bold;
+            color: #00ffaa;
+        }
+        
+        /* КЛАНЫ */
+        .clan-card {
+            background: linear-gradient(135deg, rgba(0,100,200,0.25), rgba(0,50,150,0.35));
+            border-radius: 18px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid #0088ff;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .clan-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0,136,255,0.4);
+        }
+        
+        .clan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .clan-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .clan-level {
+            background: rgba(255,204,0,0.2);
+            color: #ffcc00;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .clan-stats {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+            color: #88ccff;
+            font-size: 0.9em;
+        }
+        
+        .clan-join-btn {
+            background: linear-gradient(135deg, var(--secondary), #00aa66);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .clan-join-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .clan-join-btn.joined {
+            background: rgba(255,255,255,0.2);
+            cursor: default;
+        }
+        
+        /* PREMIUM СТИЛИ */
+        .premium-badge {
+            background: linear-gradient(135deg, var(--warning), #ff9900);
+            color: #332200;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .premium-card {
+            background: linear-gradient(135deg, rgba(255,204,0,0.15), rgba(255,153,0,0.25));
+            border: 2px solid var(--warning);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-card::before {
+            content: "⭐";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            opacity: 0.3;
+        }
+        
         /* УЛУЧШЕНИЯ */
         .upgrade-card {
             background: linear-gradient(135deg, rgba(0,100,200,0.25), rgba(0,50,150,0.35));
@@ -292,6 +455,28 @@
             background: linear-gradient(135deg, var(--danger), #cc0000);
         }
         
+        /* ТУРНИРЫ */
+        .tournament-card {
+            background: linear-gradient(135deg, rgba(255,0,100,0.15), rgba(200,0,80,0.25));
+            border: 2px solid #ff3366;
+        }
+        
+        .tournament-timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff3366;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .tournament-prize {
+            text-align: center;
+            font-size: 2em;
+            color: #00ffaa;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
         /* ПРОГРЕСС БАРЫ */
         .progress-container {
             margin: 15px 0;
@@ -355,6 +540,56 @@
             border-color: #ff9900;
         }
         
+        .notification.premium {
+            background: linear-gradient(135deg, var(--warning), #ff9900);
+            color: #332200;
+            border-color: var(--warning);
+        }
+        
+        /* МОДАЛЬНЫЕ ОКНА */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            border: 3px solid var(--primary);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-title {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #00ffff;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
         /* АДАПТИВНОСТЬ */
         @media (max-width: 400px) {
             .price { font-size: 3em; }
@@ -367,6 +602,148 @@
 <body>
     <!-- УВЕДОМЛЕНИЯ -->
     <div class="notification" id="notification"></div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО PREMIUM -->
+    <div class="modal" id="premiumModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('premiumModal')">×</button>
+            <div class="modal-title">⭐ PREMIUM ПОДПИСКА</div>
+            
+            <div class="premium-card" style="margin: 15px 0;">
+                <div class="clan-header">
+                    <div class="clan-name">
+                        <span>👑</span>
+                        <span>PREMIUM PRO</span>
+                    </div>
+                    <div class="clan-level">$9.99</div>
+                </div>
+                <div style="color: #88ccff; margin: 15px 0;">
+                    <div>✅ x3 доход от кликов</div>
+                    <div>✅ +500 GH/s к хешрейту</div>
+                    <div>✅ Ежедневный бонус 1000 TON</div>
+                    <div>✅ Приоритет в турнирах</div>
+                    <div>✅ Уникальный значок Premium</div>
+                    <div>✅ Без рекламы</div>
+                </div>
+                <button class="tg-btn premium" onclick="buyPremium(9.99)" style="width: 100%;">
+                    КУПИТЬ PREMIUM - $9.99
+                </button>
+            </div>
+            
+            <div class="premium-card" style="margin: 15px 0;">
+                <div class="clan-header">
+                    <div class="clan-name">
+                        <span>💎</span>
+                        <span>PREMIUM VIP</span>
+                    </div>
+                    <div class="clan-level">$19.99</div>
+                </div>
+                <div style="color: #88ccff; margin: 15px 0;">
+                    <div>✅ x5 доход от кликов</div>
+                    <div>✅ +2000 GH/s к хешрейту</div>
+                    <div>✅ Ежедневный бонус 5000 TON</div>
+                    <div>✅ Авто-кликер (10/сек)</div>
+                    <div>✅ Все улучшения x2</div>
+                    <div>✅ Личный менеджер</div>
+                </div>
+                <button class="tg-btn premium" onclick="buyPremium(19.99)" style="width: 100%;">
+                    КУПИТЬ VIP - $19.99
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО ПОКУПКИ TON -->
+    <div class="modal" id="buyTonModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('buyTonModal')">×</button>
+            <div class="modal-title">💰 КУПИТЬ TON</div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 2em; color: #00ffaa;">1 TON = $2.50</div>
+                <div style="color: #88aaff; margin: 10px 0;">Курс обновляется в реальном времени</div>
+            </div>
+            
+            <div class="upgrade-card" onclick="buyTonPackage(10)">
+                <div class="upgrade-header">
+                    <div class="upgrade-name">
+                        <span>💰</span>
+                        <span>10 TON</span>
+                    </div>
+                    <div class="upgrade-price">$25</div>
+                </div>
+                <div class="upgrade-desc">+5% бонус к покупке</div>
+            </div>
+            
+            <div class="upgrade-card" onclick="buyTonPackage(50)">
+                <div class="upgrade-header">
+                    <div class="upgrade-name">
+                        <span>💰</span>
+                        <span>50 TON</span>
+                    </div>
+                    <div class="upgrade-price">$125</div>
+                </div>
+                <div class="upgrade-desc">+15% бонус к покупке</div>
+            </div>
+            
+            <div class="upgrade-card" onclick="buyTonPackage(100)">
+                <div class="upgrade-header">
+                    <div class="upgrade-name">
+                        <span>💰</span>
+                        <span>100 TON</span>
+                    </div>
+                    <div class="upgrade-price">$250</div>
+                </div>
+                <div class="upgrade-desc">+30% бонус к покупке</div>
+            </div>
+            
+            <button class="tg-btn ton" onclick="openPayment()" style="width: 100%; margin-top: 20px;">
+                💳 ОТКРЫТЬ КОШЕЛЕК ДЛЯ ОПЛАТЫ
+            </button>
+        </div>
+    </div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО РЕФЕРАЛОВ -->
+    <div class="modal" id="referralModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('referralModal')">×</button>
+            <div class="modal-title">👥 ПРИГЛАСИТЬ ДРУЗЕЙ</div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 3em; color: #00ffaa;">+10%</div>
+                <div style="color: #88aaff;">от дохода каждого друга</div>
+            </div>
+            
+            <div style="background: rgba(0,136,204,0.2); padding: 15px; border-radius: 15px; margin: 15px 0;">
+                <div style="color: #88ddff; margin-bottom: 10px;">Ваша реферальная ссылка:</div>
+                <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; word-break: break-all; font-family: monospace;"
+                     id="referralLink">
+                    Загрузка...
+                </div>
+                <button class="tg-btn" onclick="copyReferralLink()" style="width: 100%; margin-top: 10px;">
+                    📋 СКОПИРОВАТЬ ССЫЛКУ
+                </button>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <div style="color: #88aaff; margin-bottom: 10px;">Ваши рефералы:</div>
+                <div id="referralList">
+                    <!-- Список рефералов будет здесь -->
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">👥 Приглашено</div>
+                    <div class="stat-value" id="referralCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">💰 Заработано</div>
+                    <div class="stat-value" id="referralEarned">0 TON</div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="container">
         <!-- ШАПКА -->
@@ -404,8 +781,8 @@
         <!-- ВКЛАДКИ -->
         <div class="tabs" id="tabs">
             <button class="tab active" onclick="switchTab('upgrades')">⚡ УЛУЧШЕНИЯ</button>
-            <button class="tab" onclick="switchTab('exchange')">🏦 БИРЖА</button>
-            <button class="tab" onclick="switchTab('tournaments')">🏆 ТУРНИРЫ</button>
+            <button class="tab" onclick="switchTab('top')">🏆 ТОП ИГРОКИ</button>
+            <button class="tab" onclick="switchTab('tournaments')">⚔️ ТУРНИРЫ</button>
             <button class="tab" onclick="switchTab('clans')">👥 КЛАНЫ</button>
         </div>
         
@@ -485,133 +862,100 @@
             </div>
         </div>
         
-        <!-- ВКЛАДКА: БИРЖА -->
-        <div class="tab-content" id="exchangeTab">
-            <div style="text-align: center; padding: 30px; color: #88aaff;">
-                <div style="font-size: 3em; margin-bottom: 20px;">🏦</div>
-                <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">
-                    КРИПТОБИРЖА
+        <!-- ВКЛАДКА: ТОП ИГРОКИ -->
+        <div class="tab-content" id="topTab">
+            <div class="leaderboard">
+                <div class="leaderboard-header">
+                    <span>🏆 ТОП ИГРОКОВ ПО ДОБЫЧЕ TON</span>
+                    <span>TON</span>
                 </div>
-                <div style="color: #aaa; margin-bottom: 30px;">
-                    Покупай и продавай TON по рыночной цене
+                <div id="topPlayers">
+                    <!-- Топ игроки будут загружены здесь -->
                 </div>
-                
-                <div class="upgrade-card" onclick="exchangeAction('buy')">
-                    <div class="upgrade-name">
-                        <span>📈</span>
-                        <span>КУПИТЬ TON</span>
-                    </div>
-                    <div class="upgrade-desc">
-                        Приобрети TON для увеличения дохода
-                    </div>
-                    <div class="upgrade-price">от 0.5 TON</div>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="color: #88aaff; margin-bottom: 10px;">Ваше место в рейтинге:</div>
+                <div style="font-size: 2em; color: #00ffaa; font-weight: bold;" id="playerRank">#0</div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">📊 Всего добыто</div>
+                    <div class="stat-value" id="totalMined">0 TON</div>
                 </div>
-                
-                <div class="upgrade-card" onclick="exchangeAction('sell')">
-                    <div class="upgrade-name">
-                        <span>📉</span>
-                        <span>ПРОДАТЬ TON</span>
-                    </div>
-                    <div class="upgrade-desc">
-                        Продай накопленные TON для вывода
-                    </div>
-                    <div class="upgrade-price">от 100 TON</div>
-                </div>
-                
-                <div class="upgrade-card" onclick="exchangeAction('trade')">
-                    <div class="upgrade-name">
-                        <span>💹</span>
-                        <span>ТОРГОВАТЬ</span>
-                    </div>
-                    <div class="upgrade-desc">
-                        Авто-трейдинг с помощью бота
-                    </div>
-                    <div class="upgrade-price">500 TON/день</div>
+                <div class="stat-card">
+                    <div class="stat-label">🚀 Лучший результат</div>
+                    <div class="stat-value" id="bestResult">$0.00</div>
                 </div>
             </div>
         </div>
         
         <!-- ВКЛАДКА: ТУРНИРЫ -->
         <div class="tab-content" id="tournamentsTab">
-            <div style="text-align: center; padding: 30px; color: #88aaff;">
-                <div style="font-size: 3em; margin-bottom: 20px;">🏆</div>
-                <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">
-                    ЕЖЕДНЕВНЫЕ ТУРНИРЫ
-                </div>
-                <div style="color: #aaa; margin-bottom: 30px;">
-                    Соревнуйся с другими игроками за награды
+            <div class="tournament-card">
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 1.5em; color: #ff3366; font-weight: bold; margin-bottom: 10px;">
+                        ⚔️ АКТИВНЫЙ ТУРНИР
+                    </div>
+                    <div class="tournament-timer" id="tournamentTimer">24:00:00</div>
+                    <div style="color: #88aaff;">До окончания</div>
                 </div>
                 
-                <div class="progress-container">
-                    <div class="progress-label">
-                        <span>Текущий турнир</span>
-                        <span id="tournamentProgress">3:45:12</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 65%"></div>
-                    </div>
+                <div class="tournament-prize" id="tournamentPrize">5,000 TON</div>
+                <div style="text-align: center; color: #88aaff; margin-bottom: 20px;">
+                    Призовой фонд
                 </div>
                 
-                <div class="stats-grid" style="margin: 30px 0;">
+                <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-label">🎯 Твоё место</div>
-                        <div class="stat-value">#24</div>
+                        <div class="stat-label">🎯 Участников</div>
+                        <div class="stat-value" id="tournamentPlayers">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">💰 Призовой фонд</div>
-                        <div class="stat-value">5,000 TON</div>
+                        <div class="stat-label">🏆 Ваше место</div>
+                        <div class="stat-value" id="tournamentPosition">#0</div>
                     </div>
                 </div>
                 
-                <button class="tg-btn" onclick="joinTournament()" style="margin-top: 20px;">
+                <button class="tg-btn" onclick="joinTournament()" style="width: 100%; margin: 15px 0;">
                     <span>⚔️</span>
-                    <span>УЧАСТВОВАТЬ (100 TON)</span>
+                    <span>УЧАСТВОВАТЬ (50 TON)</span>
                 </button>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <div style="color: #88aaff; margin-bottom: 10px;">🎮 ПРАВИЛА ТУРНИРА:</div>
+                <div style="color: #aaa; font-size: 0.9em; line-height: 1.4;">
+                    1. Турнир длится 24 часа<br>
+                    2. Побеждает игрок с наибольшим доходом<br>
+                    3. Призовой фонд распределяется между топ-3<br>
+                    4. Premium игроки получают +20% бонус<br>
+                    5. Можно присоединиться в любое время
+                </div>
             </div>
         </div>
         
         <!-- ВКЛАДКА: КЛАНЫ -->
         <div class="tab-content" id="clansTab">
-            <div style="text-align: center; padding: 30px; color: #88aaff;">
-                <div style="font-size: 3em; margin-bottom: 20px;">👥</div>
-                <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">
-                    КЛАНЫ И АЛЬЯНСЫ
-                </div>
-                <div style="color: #aaa; margin-bottom: 30px;">
-                    Объединяйся с друзьями для бонусов
-                </div>
-                
-                <div class="upgrade-card" onclick="createClan()">
-                    <div class="upgrade-name">
+            <div id="clansList">
+                <!-- Список кланов будет здесь -->
+            </div>
+            
+            <div class="clan-card" onclick="createClan()">
+                <div class="clan-header">
+                    <div class="clan-name">
                         <span>🛡️</span>
-                        <span>СОЗДАТЬ КЛАН</span>
+                        <span>СОЗДАТЬ НОВЫЙ КЛАН</span>
                     </div>
-                    <div class="upgrade-desc">
-                        Создай свой клан и приглашай друзей
-                    </div>
-                    <div class="upgrade-price">1,000 TON</div>
+                    <div class="clan-level">1,000 TON</div>
                 </div>
-                
-                <div class="upgrade-card" onclick="joinClan()">
-                    <div class="upgrade-name">
-                        <span>🤝</span>
-                        <span>ПРИСОЕДИНИТЬСЯ</span>
-                    </div>
-                    <div class="upgrade-desc">
-                        Вступи в существующий клан
-                    </div>
-                    <div class="upgrade-price">Бесплатно</div>
+                <div class="clan-stats">
+                    <div>👥 Макс: 50 игроков</div>
+                    <div>💰 Бонус: +5% к доходу</div>
                 </div>
-                
-                <div class="stats-grid" style="margin: 30px 0;">
-                    <div class="stat-card">
-                        <div class="stat-label">👥 Топ-клан</div>
-                        <div class="stat-value">TON Hunters</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">💰 Общий фонд</div>
-                        <div class="stat-value">45,230 TON</div>
-                    </div>
+                <div style="color: #88ccff; margin: 10px 0;">
+                    Создайте свой клан и приглашайте друзей для совместной добычи TON
                 </div>
             </div>
         </div>
@@ -629,17 +973,17 @@
         
         <!-- TELEGRAM КНОПКИ -->
         <div class="tg-buttons">
-            <button class="tg-btn ton" onclick="buyWithTon()">
+            <button class="tg-btn ton" onclick="openModal('buyTonModal')">
                 <span>💰</span>
                 <span>Купить TON</span>
             </button>
             
-            <button class="tg-btn" onclick="inviteFriend()">
+            <button class="tg-btn" onclick="openModal('referralModal')">
                 <span>👥</span>
                 <span>Пригласить</span>
             </button>
             
-            <button class="tg-btn premium" onclick="activatePremium()">
+            <button class="tg-btn premium" onclick="openModal('premiumModal')">
                 <span>⭐</span>
                 <span>Premium</span>
             </button>
@@ -680,6 +1024,8 @@
         // ============ ТЕЛЕГРАМ ИНИЦИАЛИЗАЦИЯ ============
         let tg = window.Telegram.WebApp;
         let isTelegram = false;
+        let userId = null;
+        let referralCode = null;
         
         if (tg) {
             isTelegram = true;
@@ -688,19 +1034,28 @@
             tg.enableClosingConfirmation();
             console.log('✅ Запущено в Telegram');
             
-            // Показываем имя игрока
+            // Получаем данные пользователя
             const user = tg.initDataUnsafe.user;
             if (user) {
+                userId = user.id;
                 document.getElementById('playerName').textContent = user.first_name || 'Игрок';
+                
+                // Генерируем реферальный код
+                referralCode = `ref_${userId}`;
             }
+            
+            // Проверяем реферальные параметры в URL
+            checkReferralParams();
         } else {
             console.log('🌐 Запущено в браузере');
             document.getElementById('playerName').textContent = 'Игрок';
+            userId = 'browser_' + Math.random().toString(36).substr(2, 9);
+            referralCode = `ref_${userId}`;
         }
         
         // ============ ИГРА ============
         let game = {
-            version: '2.0',
+            version: '3.0',
             price: 1.00,
             balance: 0,
             hashrate: 1,
@@ -708,38 +1063,79 @@
             friends: 0,
             totalClicks: 0,
             totalEarned: 0,
+            totalMined: 0,
+            bestPrice: 1.00,
             
             upgrades: {
-                gpu: 0,      // Видеокарты
-                farm: 0,     // Фермы
-                bot: false,  // Торговый бот
-                exchange: false, // Криптобиржа
-                satellite: false // Спутник
+                gpu: 0,
+                farm: 0,
+                bot: false,
+                exchange: false,
+                satellite: false
             },
             
-            // Новые системы
-            exchange: {
-                tonBalance: 0,
-                trades: 0
+            // НОВЫЕ СИСТЕМЫ
+            premium: {
+                active: false,
+                type: null, // 'pro' или 'vip'
+                expires: null
             },
             
             tournament: {
                 joined: false,
                 score: 0,
-                position: 0
+                position: 0,
+                prize: 0,
+                endTime: null
             },
             
             clan: {
+                id: null,
                 name: '',
-                members: 0,
-                fund: 0
+                role: null, // 'leader' или 'member'
+                joined: false
+            },
+            
+            referrals: {
+                count: 0,
+                earned: 0,
+                list: []
+            },
+            
+            purchases: {
+                totalSpent: 0,
+                lastPurchase: null,
+                tonBought: 0
             }
         };
+        
+        // ============ ТОП ИГРОКИ (МОК ДАННЫЕ) ============
+        let topPlayers = [
+            { id: 'ton_king', name: 'TON King 👑', ton: 1254300, clan: 'TON Hunters', premium: true },
+            { id: 'crypto_pro', name: 'Crypto Pro 🚀', ton: 987500, clan: 'Moon Miners', premium: true },
+            { id: 'miner_master', name: 'Miner Master ⚡', ton: 765200, clan: 'Crypto Empire', premium: false },
+            { id: 'blockchain_guru', name: 'Blockchain Guru 💎', ton: 543100, clan: 'Digital Warriors', premium: true },
+            { id: 'ton_hunter', name: 'TON Hunter 🏹', ton: 432500, clan: 'TON Hunters', premium: false },
+            { id: 'space_miner', name: 'Space Miner 🛰️', ton: 321800, clan: null, premium: false },
+            { id: 'crypto_ninja', name: 'Crypto Ninja 🥷', ton: 287600, clan: 'Shadow Clan', premium: true },
+            { id: 'digital_trader', name: 'Digital Trader 📈', ton: 198400, clan: 'Trading Guild', premium: false },
+            { id: 'ton_farmer', name: 'TON Farmer 🌾', ton: 154300, clan: 'Farm Alliance', premium: false },
+            { id: 'moon_shot', name: 'Moon Shot 🚀', ton: 129800, clan: null, premium: true }
+        ];
+        
+        // ============ КЛАНЫ (МОК ДАННЫЕ) ============
+        let clans = [
+            { id: 'ton_hunters', name: 'TON Hunters 🏹', level: 15, members: 48, totalTon: 2450000, description: 'Охотники за TON. Только для активных игроков!', requirements: '500+ TON/день' },
+            { id: 'moon_miners', name: 'Moon Miners 🌙', level: 12, members: 42, totalTon: 1870000, description: 'Добываем TON до самой луны!', requirements: '300+ TON/день' },
+            { id: 'crypto_empire', name: 'Crypto Empire 👑', level: 10, members: 35, totalTon: 1540000, description: 'Строим крипто-империю вместе', requirements: '200+ TON/день' },
+            { id: 'digital_warriors', name: 'Digital Warriors ⚔️', level: 8, members: 28, totalTon: 980000, description: 'Войны за цифровое золото', requirements: '100+ TON/день' },
+            { id: 'trading_guild', name: 'Trading Guild 📊', level: 6, members: 22, totalTon: 650000, description: 'Гильдия трейдеров и инвесторов', requirements: '50+ TON/день' }
+        ];
         
         // ============ ЗАГРУЗКА И СОХРАНЕНИЕ ============
         function loadGame() {
             if (isTelegram) {
-                tg.CloudStorage.getItem('tonMinerPro', (err, data) => {
+                tg.CloudStorage.getItem('tonMinerPro_v3', (err, data) => {
                     if (data) {
                         try {
                             const saved = JSON.parse(data);
@@ -754,7 +1150,7 @@
                     initGame();
                 });
             } else {
-                const saved = localStorage.getItem('tonMinerPro');
+                const saved = localStorage.getItem('tonMinerPro_v3');
                 if (saved) {
                     try {
                         const data = JSON.parse(saved);
@@ -770,9 +1166,9 @@
         
         function saveGame() {
             if (isTelegram) {
-                tg.CloudStorage.setItem('tonMinerPro', JSON.stringify(game));
+                tg.CloudStorage.setItem('tonMinerPro_v3', JSON.stringify(game));
             } else {
-                localStorage.setItem('tonMinerPro', JSON.stringify(game));
+                localStorage.setItem('tonMinerPro_v3', JSON.stringify(game));
             }
         }
         
@@ -781,6 +1177,9 @@
             updateUI();
             updateGoal();
             unlockUpgrades();
+            updateTopPlayers();
+            updateClansList();
+            updateReferralInfo();
             
             // Запускаем авто-ферму если есть
             if (game.upgrades.farm > 0) {
@@ -797,8 +1196,17 @@
                 startAutoTrading();
             }
             
+            // Запускаем турнирный таймер
+            startTournamentTimer();
+            
             // Обновляем интерфейс каждую секунду
             setInterval(updateUI, 1000);
+            setInterval(updateTournamentInfo, 5000);
+            
+            // Показываем приветствие
+            setTimeout(() => {
+                showNotification('🎮 Добро пожаловать в TON Miner PRO v3.0!', 'success');
+            }, 1000);
         }
         
         function clickTon() {
@@ -811,6 +1219,17 @@
             // Бонусы от улучшений
             clickPower += game.upgrades.gpu * 0.003;
             hashPower += game.upgrades.gpu * 5;
+            
+            // Бонус от Premium
+            if (game.premium.active) {
+                if (game.premium.type === 'pro') {
+                    clickPower *= 3;
+                    hashPower *= 1.5;
+                } else if (game.premium.type === 'vip') {
+                    clickPower *= 5;
+                    hashPower *= 2;
+                }
+            }
             
             if (game.upgrades.bot) {
                 clickPower *= 2;
@@ -825,13 +1244,23 @@
                 hashPower *= 10;
             }
             
+            // Бонус от клана
+            if (game.clan.joined) {
+                clickPower *= 1.05;
+                hashPower *= 1.05;
+            }
+            
             // Увеличиваем цену TON
             game.price += clickPower + (Math.random() * 0.01);
+            if (game.price > game.bestPrice) {
+                game.bestPrice = game.price;
+            }
             
             // Добываем TON
             const mined = hashPower * (1 + game.friends * 0.1);
             game.balance += mined;
             game.totalEarned += mined;
+            game.totalMined += mined;
             
             // Случайные ивенты
             checkRandomEvents();
@@ -948,9 +1377,11 @@
                     
                     if (game.upgrades.exchange) farmPower *= 3;
                     if (game.upgrades.satellite) farmPower *= 10;
+                    if (game.premium.active) farmPower *= 2;
                     
                     game.balance += farmPower;
                     game.totalEarned += farmPower;
+                    game.totalMined += farmPower;
                     updateUI();
                     saveGame();
                 }
@@ -968,6 +1399,7 @@
                         game.totalClicks++;
                         game.price += 0.002;
                         game.balance += game.hashrate * 0.2;
+                        game.totalMined += game.hashrate * 0.2;
                     }
                     updateUI();
                     saveGame();
@@ -984,8 +1416,8 @@
                     // Случайная торговля
                     const profit = Math.random() * 10 - 3; // -3 до +7 TON
                     game.balance += profit;
+                    game.totalMined += profit;
                     game.exchange.trades++;
-                    game.exchange.tonBalance += profit;
                     
                     if (profit > 5) {
                         showNotification(`📈 Удачная сделка: +${profit.toFixed(2)} TON`, 'success');
@@ -994,81 +1426,97 @@
                     updateUI();
                     saveGame();
                 }
-            }, 5000); // Каждые 5 секунд
+            }, 5000);
         }
         
-        // ============ НОВЫЕ СИСТЕМЫ ============
-        function exchangeAction(action) {
-            if (!isTelegram) {
-                showNotification('🏦 Биржа доступна только в Telegram версии', 'warning');
-                return;
-            }
+        // ============ ТОП ИГРОКИ ============
+        function updateTopPlayers() {
+            const container = document.getElementById('topPlayers');
+            container.innerHTML = '';
             
-            switch(action) {
-                case 'buy':
-                    tg.showPopup({
-                        title: 'Купить TON',
-                        message: 'Выберите количество:',
-                        buttons: [
-                            {id: 'buy500', type: 'default', text: '500 TON - 2 TON'},
-                            {id: 'buy1000', type: 'default', text: '1000 TON - 4 TON'},
-                            {id: 'buy5000', type: 'default', text: '5000 TON - 18 TON'},
-                            {type: 'cancel'}
-                        ]
-                    }, (btnId) => {
-                        if (btnId === 'buy500') {
-                            game.balance += 500;
-                            showNotification('✅ Куплено 500 TON!', 'success');
-                        } else if (btnId === 'buy1000') {
-                            game.balance += 1000;
-                            showNotification('✅ Куплено 1000 TON!', 'success');
-                        } else if (btnId === 'buy5000') {
-                            game.balance += 5000;
-                            showNotification('✅ Куплено 5000 TON!', 'success');
-                        }
-                        updateUI();
-                        saveGame();
-                    });
-                    break;
-                    
-                case 'sell':
-                    if (game.balance < 100) {
-                        showNotification('❌ Минимум для продажи: 100 TON', 'error');
-                        return;
-                    }
-                    
-                    const sellAmount = Math.floor(game.balance * 0.1); // 10% от баланса
-                    game.balance -= sellAmount;
-                    showNotification(`📤 Продано ${sellAmount} TON`, 'success');
-                    updateUI();
-                    saveGame();
-                    break;
-                    
-                case 'trade':
-                    if (game.balance < 500) {
-                        showNotification('❌ Нужно 500 TON для торговли', 'error');
-                        return;
-                    }
-                    
-                    game.balance -= 100; // Комиссия
-                    showNotification('🤖 Авто-трейдинг запущен на 24 часа!', 'success');
-                    break;
-            }
+            // Добавляем игроков из мок данных
+            topPlayers.forEach((player, index) => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                
+                let rankClass = 'player-rank';
+                if (index === 0) rankClass += ' top1';
+                else if (index === 1) rankClass += ' top2';
+                else if (index === 2) rankClass += ' top3';
+                
+                item.innerHTML = `
+                    <div class="${rankClass}">${index + 1}</div>
+                    <div class="player-info">
+                        <div class="player-name">
+                            ${player.name}
+                            ${player.premium ? '<span class="premium-badge" style="margin-left: 5px; font-size: 0.7em;">PREMIUM</span>' : ''}
+                        </div>
+                        ${player.clan ? `<div class="player-clan">${player.clan}</div>` : ''}
+                    </div>
+                    <div class="player-ton">${formatNumber(player.ton)} TON</div>
+                `;
+                
+                container.appendChild(item);
+            });
+            
+            // Обновляем позицию игрока
+            updatePlayerRank();
         }
         
-        function joinTournament() {
-            if (game.balance < 100) {
-                showNotification('❌ Нужно 100 TON для участия', 'error');
-                return;
+        function updatePlayerRank() {
+            // В реальном приложении здесь была бы логика сравнения с другими игроками
+            const playerScore = game.totalMined;
+            let rank = topPlayers.length + 1;
+            
+            for (let i = 0; i < topPlayers.length; i++) {
+                if (playerScore > topPlayers[i].ton) {
+                    rank = i + 1;
+                    break;
+                }
             }
             
-            game.balance -= 100;
-            game.tournament.joined = true;
-            game.tournament.score = game.price;
+            document.getElementById('playerRank').textContent = '#' + rank;
+            document.getElementById('totalMined').textContent = formatNumber(game.totalMined) + ' TON';
+            document.getElementById('bestResult').textContent = '$' + game.bestPrice.toFixed(2);
+        }
+        
+        // ============ КЛАНЫ ============
+        function updateClansList() {
+            const container = document.getElementById('clansList');
+            container.innerHTML = '';
             
-            showNotification('⚔️ Вы участвуете в турнире!', 'success');
-            updateUI();
-            saveGame();
+            clans.forEach(clan => {
+                const card = document.createElement('div');
+                card.className = 'clan-card';
+                
+                const isMember = game.clan.id === clan.id;
+                
+                card.innerHTML = `
+                    <div class="clan-header">
+                        <div class="clan-name">
+                            <span>🛡️</span>
+                            <span>${clan.name}</span>
+                        </div>
+                        <div class="clan-level">Ур. ${clan.level}</div>
+                    </div>
+                    <div class="clan-stats">
+                        <div>👥 ${clan.members}/50</div>
+                        <div>💰 ${formatNumber(clan.totalTon)} TON</div>
+                    </div>
+                    <div style="color: #88ccff; margin: 10px 0; font-size: 0.9em;">
+                        ${clan.description}
+                    </div>
+                    <div style="color: #ffcc00; font-size: 0.8em; margin-bottom: 10px;">
+                        📋 Требования: ${clan.requirements}
+                    </div>
+                    <button class="clan-join-btn ${isMember ? 'joined' : ''}" 
+                            onclick="${isMember ? '' : `joinClan('${clan.id}')`}">
+                        ${isMember ? '✅ ВЫ В КЛАНЕ' : '🤝 ВСТУПИТЬ'}
+                    </button>
+                `;
+                
+                container.appendChild(card);
+            });
         }
         
         function createClan() {
@@ -1077,122 +1525,343 @@
                 return;
             }
             
-            game.balance -= 1000;
-            game.clan.name = prompt('Введите название клана:') || 'Мой клан';
-            game.clan.members = 1;
-            game.clan.fund = 1000;
+            const clanName = prompt('Введите название клана (3-20 символов):');
+            if (!clanName || clanName.length < 3 || clanName.length > 20) {
+                showNotification('❌ Название должно быть от 3 до 20 символов', 'error');
+                return;
+            }
             
-            showNotification(`🛡️ Клан "${game.clan.name}" создан!`, 'success');
+            game.balance -= 1000;
+            game.clan = {
+                id: 'user_' + Date.now(),
+                name: clanName,
+                role: 'leader',
+                joined: true
+            };
+            
+            // Добавляем в список кланов
+            clans.unshift({
+                id: game.clan.id,
+                name: clanName + ' 🆕',
+                level: 1,
+                members: 1,
+                totalTon: 1000,
+                description: 'Новый клан. Присоединяйтесь!',
+                requirements: '10+ TON/день'
+            });
+            
+            showNotification(`🛡️ Клан "${clanName}" создан!`, 'success');
+            updateUI();
+            updateClansList();
+            saveGame();
+        }
+        
+        function joinClan(clanId) {
+            if (game.clan.joined) {
+                showNotification('❌ Вы уже состоите в клане', 'error');
+                return;
+            }
+            
+            const clan = clans.find(c => c.id === clanId);
+            if (!clan) return;
+            
+            if (game.totalMined < 500) {
+                showNotification('❌ Нужно добыть минимум 500 TON', 'error');
+                return;
+            }
+            
+            game.clan = {
+                id: clanId,
+                name: clan.name,
+                role: 'member',
+                joined: true
+            };
+            
+            clan.members++;
+            
+            showNotification(`🎉 Вы вступили в клан "${clan.name}"!`, 'success');
+            updateUI();
+            updateClansList();
+            saveGame();
+        }
+        
+        // ============ ТУРНИРЫ ============
+        let tournamentInterval;
+        function startTournamentTimer() {
+            if (game.tournament.endTime && Date.now() < game.tournament.endTime) {
+                updateTournamentTimer();
+                
+                if (tournamentInterval) clearInterval(tournamentInterval);
+                tournamentInterval = setInterval(updateTournamentTimer, 1000);
+            } else {
+                // Создаем новый турнир
+                game.tournament = {
+                    joined: false,
+                    score: 0,
+                    position: 0,
+                    prize: 5000 + Math.floor(Math.random() * 5000),
+                    endTime: Date.now() + 24 * 60 * 60 * 1000 // 24 часа
+                };
+                saveGame();
+                
+                updateTournamentTimer();
+                if (tournamentInterval) clearInterval(tournamentInterval);
+                tournamentInterval = setInterval(updateTournamentTimer, 1000);
+            }
+        }
+        
+        function updateTournamentTimer() {
+            if (!game.tournament.endTime) return;
+            
+            const now = Date.now();
+            const timeLeft = game.tournament.endTime - now;
+            
+            if (timeLeft <= 0) {
+                // Турнир окончен
+                endTournament();
+                return;
+            }
+            
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            document.getElementById('tournamentTimer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function updateTournamentInfo() {
+            if (game.tournament.joined) {
+                // Обновляем счет
+                game.tournament.score = game.totalMined;
+                
+                // В реальном приложении здесь было бы сравнение с другими игроками
+                const position = 15 + Math.floor(Math.random() * 30);
+                game.tournament.position = position;
+                
+                document.getElementById('tournamentPosition').textContent = '#' + position;
+            }
+            
+            document.getElementById('tournamentPrize').textContent = formatNumber(game.tournament.prize) + ' TON';
+            document.getElementById('tournamentPlayers').textContent = 85 + Math.floor(Math.random() * 50);
+        }
+        
+        function joinTournament() {
+            if (game.tournament.joined) {
+                showNotification('✅ Вы уже участвуете в турнире', 'warning');
+                return;
+            }
+            
+            if (game.balance < 50) {
+                showNotification('❌ Нужно 50 TON для участия', 'error');
+                return;
+            }
+            
+            game.balance -= 50;
+            game.tournament.joined = true;
+            game.tournament.score = game.totalMined;
+            game.tournament.position = 85 + Math.floor(Math.random() * 30);
+            
+            showNotification('⚔️ Вы участвуете в турнире! Удачи!', 'success');
             updateUI();
             saveGame();
         }
         
-        function joinClan() {
-            showNotification('👥 Поиск доступных кланов...', 'warning');
-            // В будущем можно сделать список кланов
+        function endTournament() {
+            if (game.tournament.joined) {
+                // В реальном приложении здесь была бы логика определения победителей
+                const wonPrize = game.tournament.position <= 3 ? game.tournament.prize / (4 - game.tournament.position) : 0;
+                
+                if (wonPrize > 0) {
+                    game.balance += wonPrize;
+                    showNotification(`🏆 ТУРНИР ОКОНЧЕН! Вы выиграли ${formatNumber(wonPrize)} TON!`, 'success');
+                } else {
+                    showNotification('🏆 Турнир окончен. В следующий раз повезет больше!', 'warning');
+                }
+            }
+            
+            // Создаем новый турнир
+            game.tournament = {
+                joined: false,
+                score: 0,
+                position: 0,
+                prize: 5000 + Math.floor(Math.random() * 5000),
+                endTime: Date.now() + 24 * 60 * 60 * 1000
+            };
+            
+            updateUI();
+            saveGame();
+        }
+        
+        // ============ PREMIUM ============
+        function buyPremium(price) {
+            if (!isTelegram) {
+                showNotification('⭐ Premium доступен только в Telegram версии', 'warning');
+                return;
+            }
+            
+            const type = price === 9.99 ? 'pro' : 'vip';
+            
+            // В реальном приложении здесь была бы интеграция с платежной системой
+            tg.showPopup({
+                title: '💳 ОПЛАТА PREMIUM',
+                message: `Оплатите $${price} для активации Premium ${type.toUpperCase()}`,
+                buttons: [
+                    {id: 'pay', type: 'default', text: `💳 ОПЛАТИТЬ $${price}`},
+                    {type: 'cancel'}
+                ]
+            }, (btnId) => {
+                if (btnId === 'pay') {
+                    game.premium = {
+                        active: true,
+                        type: type,
+                        expires: Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 дней
+                    };
+                    
+                    game.purchases.totalSpent += price;
+                    game.purchases.lastPurchase = new Date().toISOString();
+                    
+                    showNotification(`⭐ PREMIUM ${type.toUpperCase()} АКТИВИРОВАН!`, 'premium');
+                    updateUI();
+                    saveGame();
+                    closeModal('premiumModal');
+                }
+            });
+        }
+        
+        // ============ ПОКУПКА TON ============
+        function buyTonPackage(amount) {
+            const price = amount * 2.5; // $2.50 за 1 TON
+            const bonus = amount * (amount === 10 ? 0.05 : amount === 50 ? 0.15 : 0.30);
+            const total = amount + bonus;
+            
+            tg.showPopup({
+                title: '💰 ПОКУПКА TON',
+                message: `Купить ${amount} TON + ${bonus.toFixed(0)} бонусных TON за $${price}?`,
+                buttons: [
+                    {id: 'confirm', type: 'default', text: `💳 ОПЛАТИТЬ $${price}`},
+                    {type: 'cancel'}
+                ]
+            }, (btnId) => {
+                if (btnId === 'confirm') {
+                    game.balance += total;
+                    game.purchases.tonBought += total;
+                    game.purchases.totalSpent += price;
+                    game.purchases.lastPurchase = new Date().toISOString();
+                    
+                    showNotification(`✅ Куплено ${total.toFixed(0)} TON!`, 'success');
+                    updateUI();
+                    saveGame();
+                    closeModal('buyTonModal');
+                }
+            });
+        }
+        
+        function openPayment() {
+            if (!isTelegram) {
+                showNotification('💳 Оплата доступна только в Telegram', 'warning');
+                return;
+            }
+            
+            tg.openInvoice('invoice_url_here', (status) => {
+                if (status === 'paid') {
+                    showNotification('✅ Оплата прошла успешно!', 'success');
+                }
+            });
+        }
+        
+        // ============ РЕФЕРАЛЬНАЯ СИСТЕМА ============
+        function checkReferralParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ref = urlParams.get('ref');
+            
+            if (ref && ref !== referralCode) {
+                // Сохраняем реферала
+                if (!game.referrals.list.includes(ref)) {
+                    game.referrals.list.push(ref);
+                    game.referrals.count++;
+                    game.balance += 100; // Бонус за приглашение
+                    
+                    showNotification('🎉 Вы приглашены по реферальной ссылке! +100 TON', 'success');
+                    saveGame();
+                    updateReferralInfo();
+                }
+            }
+        }
+        
+        function updateReferralInfo() {
+            if (referralCode) {
+                let referralUrl = window.location.href.split('?')[0];
+                referralUrl += (referralUrl.includes('?') ? '&' : '?') + 'ref=' + referralCode;
+                
+                document.getElementById('referralLink').textContent = referralUrl;
+            }
+            
+            document.getElementById('referralCount').textContent = game.referrals.count;
+            document.getElementById('referralEarned').textContent = formatNumber(game.referrals.earned) + ' TON';
+            
+            // Обновляем список рефералов
+            const listContainer = document.getElementById('referralList');
+            listContainer.innerHTML = '';
+            
+            if (game.referrals.list.length === 0) {
+                listContainer.innerHTML = '<div style="color: #888; text-align: center; padding: 10px;">Пока нет рефералов</div>';
+            } else {
+                game.referrals.list.forEach((ref, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'leaderboard-item';
+                    item.style.padding = '8px 10px';
+                    item.innerHTML = `
+                        <div class="player-rank">${index + 1}</div>
+                        <div class="player-info">
+                            <div class="player-name">Реферал #${index + 1}</div>
+                            <div class="player-clan">Код: ${ref}</div>
+                        </div>
+                        <div class="player-ton">+100 TON</div>
+                    `;
+                    listContainer.appendChild(item);
+                });
+            }
+        }
+        
+        function copyReferralLink() {
+            const link = document.getElementById('referralLink').textContent;
+            navigator.clipboard.writeText(link)
+                .then(() => showNotification('📋 Ссылка скопирована!', 'success'))
+                .catch(() => showNotification('❌ Ошибка копирования', 'error'));
         }
         
         // ============ TELEGRAM ФУНКЦИИ ============
-        function buyWithTon() {
-            if (!isTelegram) {
-                showNotification('💰 Покупка TON доступна в Telegram', 'warning');
-                return;
-            }
-            
-            tg.showPopup({
-                title: '💎 ПРЕМИУМ ПАКЕТЫ',
-                message: 'Выберите пакет:',
-                buttons: [
-                    {id: 'starter', type: 'default', text: 'СТАРТЕР: 1000 TON + буст'},
-                    {id: 'pro', type: 'default', text: 'PRO: 5000 TON + x2 доход'},
-                    {id: 'vip', type: 'default', text: 'VIP: 20000 TON + всё x3'},
-                    {type: 'cancel'}
-                ]
-            }, (btnId) => {
-                if (btnId === 'starter') {
-                    game.balance += 1000;
-                    game.hashrate *= 1.5;
-                    showNotification('💎 СТАРТЕР пакет активирован!', 'success');
-                } else if (btnId === 'pro') {
-                    game.balance += 5000;
-                    game.hashrate *= 2;
-                    showNotification('🚀 PRO пакет активирован!', 'success');
-                } else if (btnId === 'vip') {
-                    game.balance += 20000;
-                    game.hashrate *= 3;
-                    showNotification('👑 VIP пакет активирован! ВСЁ x3!', 'success');
-                }
-                updateUI();
-                saveGame();
-            });
-        }
-        
-        function inviteFriend() {
-            if (!isTelegram) {
-                const url = window.location.href;
-                navigator.clipboard.writeText(url);
-                showNotification('📋 Ссылка скопирована!', 'success');
-                return;
-            }
-            
-            const url = window.location.href;
-            const text = `🎮 Я играю в TON Miner PRO! Уже на $${game.price.toFixed(2)}! Присоединяйся!`;
-            
-            tg.shareUrl(url, text, (shared) => {
-                if (shared) {
-                    game.friends++;
-                    game.balance += 200; // Больший бонус за друга
-                    game.hashrate *= 1.1; // +10% к хешрейту
-                    showNotification(`👥 Друг приглашён! +200 TON, +10% к доходу!`, 'success');
-                    updateUI();
-                    saveGame();
-                }
-            });
-        }
-        
-        function activatePremium() {
-            if (!isTelegram) {
-                showNotification('⭐ Premium доступен в Telegram', 'warning');
-                return;
-            }
-            
-            tg.showPopup({
-                title: '⭐ PREMIUM ДОСТУП',
-                message: 'Разблокируй Premium на 30 дней:',
-                buttons: [
-                    {id: 'buyPremium', type: 'default', text: 'КУПИТЬ - 10 TON'},
-                    {type: 'cancel'}
-                ]
-            }, (btnId) => {
-                if (btnId === 'buyPremium') {
-                    if (game.balance >= 10) {
-                        game.balance -= 10;
-                        game.level = 15; // Макс уровень
-                        game.hashrate *= 3;
-                        showNotification('⭐ PREMIUM АКТИВИРОВАН! Уровень 15, доход x3!', 'success');
-                        updateUI();
-                        saveGame();
-                    } else {
-                        showNotification('❌ Недостаточно TON для Premium', 'error');
-                    }
-                }
-            });
-        }
-        
         function dailyBonus() {
             const today = new Date().toDateString();
             const lastBonus = localStorage.getItem('lastDailyBonus');
             
             if (lastBonus !== today) {
-                const bonus = 500 + (game.level * 100);
+                let bonus = 500 + (game.level * 100);
+                
+                // Бонус от Premium
+                if (game.premium.active) {
+                    if (game.premium.type === 'pro') bonus *= 2;
+                    else if (game.premium.type === 'vip') bonus *= 5;
+                }
+                
                 game.balance += bonus;
                 localStorage.setItem('lastDailyBonus', today);
-                showNotification(`🎁 ЕЖЕДНЕВНЫЙ БОНУС: ${bonus} TON!`, 'success');
+                showNotification(`🎁 ЕЖЕДНЕВНЫЙ БОНУС: ${formatNumber(bonus)} TON!`, 'success');
                 updateUI();
                 saveGame();
             } else {
                 showNotification('🎁 Бонус уже получен сегодня!', 'warning');
             }
+        }
+        
+        // ============ МОДАЛЬНЫЕ ОКНА ============
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
         
         // ============ ВСПОМОГАТЕЛЬНЫЕ ============
@@ -1225,6 +1894,7 @@
             // Рост цены
             let growth = 0.01 + (game.upgrades.gpu * 0.003);
             if (game.upgrades.bot) growth *= 2;
+            if (game.premium.active) growth *= (game.premium.type === 'pro' ? 3 : 5);
             if (game.upgrades.satellite) growth *= 10;
             document.getElementById('growthRate').textContent = growth.toFixed(3);
             
@@ -1251,7 +1921,11 @@
             let autoPower = game.upgrades.farm * 25;
             if (game.upgrades.exchange) autoPower *= 3;
             if (game.upgrades.satellite) autoPower *= 10;
+            if (game.premium.active) autoPower *= 2;
             document.getElementById('autoIncome').textContent = formatNumber(autoPower) + '/сек';
+            
+            // Обновляем позицию в рейтинге
+            updatePlayerRank();
         }
         
         function updateGoal() {
@@ -1303,6 +1977,8 @@
                 notif.classList.add('error');
             } else if (type === 'warning') {
                 notif.classList.add('warning');
+            } else if (type === 'premium') {
+                notif.classList.add('premium');
             }
             
             notif.style.display = 'block';
@@ -1321,11 +1997,13 @@
         // ============ ЗАПУСК ИГРЫ ============
         window.addEventListener('DOMContentLoaded', () => {
             loadGame();
-            
-            // Показываем приветствие
-            setTimeout(() => {
-                showNotification('🎮 Добро пожаловать в TON Miner PRO!', 'success');
-            }, 1000);
+        });
+        
+        // Закрытие модальных окон по клику вне их
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
         });
     </script>
 </body>
