@@ -7,7 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            background: #0a0a0a;
             color: white;
             font-family: Arial, sans-serif;
             padding: 20px;
@@ -19,18 +19,12 @@
         .container {
             max-width: 500px;
             margin: 0 auto;
-            background: rgba(30, 30, 46, 0.9);
-            padding: 25px;
-            border-radius: 20px;
-            border: 2px solid #00ffff;
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
         }
         
         h1 {
             color: #00ffff;
             margin-bottom: 20px;
             font-size: 2em;
-            text-shadow: 0 0 10px #00ffff;
         }
         
         .price {
@@ -39,7 +33,6 @@
             font-weight: bold;
             margin: 30px 0;
             text-shadow: 0 0 15px #00ff88;
-            transition: transform 0.3s;
         }
         
         .main-btn {
@@ -53,12 +46,6 @@
             cursor: pointer;
             width: 100%;
             margin: 20px 0;
-            transition: transform 0.2s;
-            box-shadow: 0 8px 20px rgba(255, 0, 136, 0.4);
-        }
-        
-        .main-btn:active {
-            transform: scale(0.95);
         }
         
         .stats {
@@ -70,38 +57,6 @@
             font-size: 1.2em;
         }
         
-        .tg-btn {
-            background: linear-gradient(45deg, #0088cc, #0066aa);
-            color: white;
-            border: none;
-            padding: 20px;
-            font-size: 18px;
-            border-radius: 15px;
-            cursor: pointer;
-            width: 100%;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .tg-btn.ton {
-            background: linear-gradient(45deg, #ffcc00, #ff9900);
-        }
-        
-        .tg-btn.share {
-            background: linear-gradient(45deg, #00cc88, #00ffaa);
-        }
-        
-        .player-info {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
         .upgrade {
             background: rgba(0, 100, 255, 0.2);
             border: 2px solid #0088ff;
@@ -110,37 +65,46 @@
             margin: 10px 0;
             cursor: pointer;
             text-align: left;
-            transition: all 0.3s;
         }
         
-        .upgrade:active {
-            background: rgba(0, 100, 255, 0.4);
-            transform: translateX(5px);
+        .tg-btn {
+            background: #0088cc;
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
         }
         
-        .achievement-item {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 10px;
-            opacity: 0.6;
+        .tg-btn.ton {
+            background: #ffcc00;
+            color: black;
         }
         
-        .achievement-item.unlocked {
-            background: rgba(0,255,100,0.2);
-            border-color: #00ff88;
-            opacity: 1;
+        .tg-btn.share {
+            background: #00cc88;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #003311;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🚀 TON MINER</h1>
-        <div class="player-info">
-            <div>👤 Игрок: <span id="playerName">Загрузка...</span></div>
-            <div>💰 Баланс: <span id="balance">0</span> TON</div>
-            <div>📊 Кликов: <span id="clicks">0</span></div>
-        </div>
         
         <div class="price" id="price">$1.00</div>
         
@@ -149,15 +113,14 @@
         </button>
         
         <div class="stats">
+            <p>💰 Баланс: <span id="balance">0</span> TON</p>
             <p>⚡ Хешрейт: <span id="hashrate">1</span> GH/s</p>
-            <p>📈 Рост: +<span id="growth">0.01</span>/клик</p>
             <p>👥 Друзей: <span id="friends">0</span></p>
-            <p>🎯 Уровень: <span id="level">1</span></p>
         </div>
         
         <div class="upgrade" onclick="buyUpgrade('gpu')">
             <div style="font-weight: bold; color: #88ccff;">💻 Видеокарта</div>
-            <div style="font-size: 0.9em;">+5 GH/s, +0.3% к цене</div>
+            <div style="font-size: 0.9em;">+5 GH/s</div>
             <div style="color: #ffcc00; font-weight: bold; margin-top: 5px;">
                 Цена: <span id="gpuPrice">50</span> TON
             </div>
@@ -179,61 +142,27 @@
             👥 ПРИГЛАСИТЬ ДРУГА
         </button>
         
-        <button class="tg-btn" onclick="dailyBonus()">
-            🎁 ЕЖЕДНЕВНЫЙ БОНУС
-        </button>
-        
-        <!-- БЛОК ЦЕЛИ $1000 -->
-        <div style="margin-top: 30px; padding: 20px; background: rgba(255,100,100,0.1); border-radius: 15px; border: 2px solid #ff4444;">
-            <div style="color: #ff4444; font-weight: bold; font-size: 1.2em; margin-bottom: 10px;">
-                🏆 ГЛАВНАЯ ЦЕЛЬ: $1000
+        <!-- ПРОСТАЯ ЦЕЛЬ $1000 -->
+        <div style="margin-top: 30px; padding: 15px; background: rgba(255,100,100,0.2); border-radius: 15px;">
+            <div style="color: #ff4444; font-weight: bold;">🏆 ЦЕЛЬ: $1000</div>
+            <div style="color: #ff8888; font-size: 0.9em; margin: 10px 0;">
+                Прогресс: <span id="goalProgress">0.1%</span>
             </div>
-            <div style="color: #ff8888; margin-bottom: 10px;">
-                Достигни $1000 и получи реальные TON на кошелёк!
-            </div>
-            <div style="background: rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; margin-bottom: 10px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>Прогресс:</span>
-                    <span id="goalProgress">0.1%</span>
-                </div>
-                <div style="height: 10px; background: rgba(255,255,255,0.2); border-radius: 5px; overflow: hidden;">
-                    <div id="goalBar" style="height: 100%; background: linear-gradient(90deg, #ff4444, #ff9900); width: 0.1%; transition: width 0.5s;"></div>
-                </div>
-            </div>
-            <div style="color: #ffcc00; font-size: 0.9em;">
-                🎁 Награда: 10000 TON + 10 реальных TON
+            <div style="height: 10px; background: rgba(255,255,255,0.2); border-radius: 5px; overflow: hidden;">
+                <div id="goalBar" style="height: 100%; background: #ff4444; width: 0.1%;"></div>
             </div>
         </div>
         
-        <!-- БЛОК ДОСТИЖЕНИЙ -->
-        <div style="margin-top: 20px; padding: 20px; background: rgba(0,100,255,0.1); border-radius: 15px; border: 1px solid #0088ff;">
-            <div style="color: #00aaff; font-weight: bold; font-size: 1.2em; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <span>🎯 ДОСТИЖЕНИЯ</span>
-                <span style="font-size: 0.8em; background: #00aaff; color: white; padding: 2px 8px; border-radius: 10px;" id="achievementsCount">0/15</span>
+        <!-- ПРОСТЫЕ ДОСТИЖЕНИЯ -->
+        <div style="margin-top: 20px; padding: 15px; background: rgba(0,100,255,0.2); border-radius: 15px;">
+            <div style="color: #00aaff; font-weight: bold;">🎯 ДОСТИЖЕНИЯ</div>
+            <div id="achievementsList" style="margin-top: 10px; text-align: left;">
+                <!-- Будут добавлены через JS -->
             </div>
-            
-            <div id="achievementsList" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                <!-- Достижения будут загружены через JS -->
-            </div>
-        </div>
-        
-        <!-- БЛОК СЛОЖНОСТИ -->
-        <div style="margin-top: 20px; padding: 15px; background: rgba(100,0,255,0.1); border-radius: 15px; border: 1px solid #8800ff;">
-            <div style="color: #aa00ff; font-weight: bold; margin-bottom: 10px;">⚡ СЛОЖНОСТЬ ИГРЫ</div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span>Уровень сложности:</span>
-                <span id="difficultyLevel">НОВИЧОК</span>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-                <span>Множитель цен:</span>
-                <span id="priceMultiplier">x1.0</span>
-            </div>
-        </div>
-        
-        <div style="margin-top: 30px; font-size: 0.9em; color: #88aaff;">
-            Игра сохранена в вашем Telegram аккаунте
         </div>
     </div>
+
+    <div class="notification" id="notification"></div>
 
     <script>
         // ============ TELEGRAM ============
@@ -242,13 +171,6 @@
         // Инициализация Telegram
         tg.expand();
         tg.ready();
-        tg.enableClosingConfirmation();
-        
-        // Показываем имя пользователя
-        const user = tg.initDataUnsafe.user;
-        if (user) {
-            document.getElementById('playerName').textContent = user.first_name || 'Игрок';
-        }
         
         // ============ ИГРА ============
         let game = {
@@ -256,81 +178,40 @@
             balance: 0,
             hashrate: 1,
             friends: 0,
-            level: 1,
             totalClicks: 0,
-            upgrades: { gpu: 0, farm: 0 },
-            achievements: {}
+            upgrades: { gpu: 0, farm: 0 }
         };
         
-        // ============ ДОСТИЖЕНИЯ ============
-        const achievements = [
-            { id: 'first_5', name: 'Новичок', desc: 'Достигнуть $5', goal: 5, reward: 100, emoji: '👶', unlocked: false },
-            { id: 'first_50', name: 'Инвестор', desc: 'Достигнуть $50', goal: 50, reward: 500, emoji: '💼', unlocked: false },
-            { id: 'first_100', name: 'Трейдер', desc: 'Достигнуть $100', goal: 100, reward: 1000, emoji: '📈', unlocked: false },
-            { id: 'first_500', name: 'Криптобосс', desc: 'Достигнуть $500', goal: 500, reward: 5000, emoji: '👑', unlocked: false },
-            { id: 'legend_1000', name: 'LEGEND', desc: 'Достигнуть $1000', goal: 1000, reward: 10000, emoji: '🏆', unlocked: false },
-            { id: 'friend_5', name: 'Социальный', desc: 'Пригласить 5 друзей', goal: 5, reward: 'Premium', emoji: '👥', unlocked: false, type: 'friends' },
-            { id: 'balance_10k', name: 'Магнат', desc: 'Заработать 10000 TON', goal: 10000, reward: 'x2 ко всему', emoji: '💰', unlocked: false, type: 'balance' },
-            { id: 'clicks_1k', name: 'Неутомимый', desc: 'Сделать 1000 кликов', goal: 1000, reward: 'Авто-кликер', emoji: '⚡', unlocked: false, type: 'clicks' },
-            { id: 'farm_10', name: 'Фермер', desc: 'Купить 10 ферм', goal: 10, reward: 'x3 авто-добыча', emoji: '🌾', unlocked: false, type: 'farms' },
-            { id: 'gpu_20', name: 'Мастер GPU', desc: 'Купить 20 видеокарт', goal: 20, reward: 'x2 к цене', emoji: '💻', unlocked: false, type: 'gpus' },
-            { id: 'streak_7', name: 'Ветеран', desc: 'Играть 7 дней подряд', goal: 7, reward: 'Статус', emoji: '🎖️', unlocked: false, type: 'streak' },
-            { id: 'fast_100', name: 'Скорость', desc: 'Достигнуть $100 за 1 час', goal: 100, reward: 'Буст', emoji: '🚀', unlocked: false, type: 'speed' },
-            { id: 'rich_50k', name: 'Богач', desc: 'Накопить 50000 TON', goal: 50000, reward: 'x5 баланс', emoji: '💎', unlocked: false, type: 'rich' },
-            { id: 'pump_10x', name: 'Пампер', desc: 'Увеличить цену в 10 раз', goal: 10, reward: 'Мега-буст', emoji: '📊', unlocked: false, type: 'multiplier' },
-            { id: 'complete_all', name: 'БОГ TON', desc: 'Получить все достижения', goal: 14, reward: 'ВЕЧНАЯ СЛАВА', emoji: '👑', unlocked: false, type: 'all' }
+        // Простые достижения
+        let achievements = [
+            { id: 'first_click', name: 'Первый клик', desc: 'Сделать 1 клик', goal: 1, reward: 10, type: 'clicks' },
+            { id: 'first_5', name: 'Новичок', desc: 'Достигнуть $5', goal: 5, reward: 100 },
+            { id: 'first_50', name: 'Инвестор', desc: 'Достигнуть $50', goal: 50, reward: 500 },
+            { id: 'first_100', name: 'Трейдер', desc: 'Достигнуть $100', goal: 100, reward: 1000 },
+            { id: 'first_1000', name: 'ЛЕГЕНДА', desc: 'Достигнуть $1000', goal: 1000, reward: 10000 }
         ];
         
-        // ============ СЛОЖНОСТЬ ============
-        const difficultyLevels = [
-            { name: 'НОВИЧОК', multiplier: 1.0, minPrice: 1, color: '#00ff88' },
-            { name: 'ОПЫТНЫЙ', multiplier: 1.5, minPrice: 50, color: '#00aaff' },
-            { name: 'ПРОФЕССИОНАЛ', multiplier: 2.0, minPrice: 200, color: '#aa00ff' },
-            { name: 'ЭКСПЕРТ', multiplier: 3.0, minPrice: 500, color: '#ffaa00' },
-            { name: 'ЛЕГЕНДА', multiplier: 5.0, minPrice: 1000, color: '#ff4444' }
-        ];
-        
-        // ============ ИНИЦИАЛИЗАЦИЯ ============
-        function initGame() {
-            // Загрузка из Telegram Cloud
+        // Загрузка игры
+        function loadGame() {
             tg.CloudStorage.getItem('tonGame', (err, data) => {
                 if (data) {
                     try {
-                        const saved = JSON.parse(data);
-                        game = { ...game, ...saved };
+                        game = JSON.parse(data);
+                        updateUI();
+                        if (game.upgrades.farm > 0) startAutoFarm();
                     } catch(e) {
                         console.log('Ошибка загрузки');
                     }
                 }
-                updateUI();
-                initAchievements();
+                updateAchievements();
                 updateGoal();
-                updateDifficulty();
             });
-            
-            // Запускаем авто-ферму если есть
-            if (game.upgrades.farm > 0) {
-                startAutoFarm();
-            }
-            
-            // Проверяем достижения каждые 3 секунды
-            setInterval(() => {
-                checkAchievements();
-                updateGoal();
-                updateDifficulty();
-            }, 3000);
         }
         
-        // ============ ОСНОВНЫЕ ФУНКЦИИ ============
+        // Клик
         function clickTon() {
             game.totalClicks++;
-            
-            // Увеличиваем цену
-            let increase = 0.01;
-            increase += game.upgrades.gpu * 0.003;
-            game.price += increase;
-            
-            // Добываем TON
+            game.price += 0.01 + (game.upgrades.gpu * 0.003);
             game.balance += game.hashrate;
             
             updateUI();
@@ -340,14 +221,9 @@
             // Анимация
             document.getElementById('price').style.transform = 'scale(1.1)';
             setTimeout(() => document.getElementById('price').style.transform = 'scale(1)', 100);
-            
-            // Случайный памп
-            if (Math.random() < 0.05) {
-                game.price *= 1.1;
-                tg.showAlert('📈 ПАМП! Цена +10%!');
-            }
         }
         
+        // Покупка улучшений
         function buyUpgrade(type) {
             let price = 0;
             let message = '';
@@ -371,16 +247,29 @@
             }
             
             if (message) {
-                tg.showAlert(message);
+                showNotification(message);
                 updateUI();
                 saveGame();
-                checkAchievements();
             } else if (price > 0 && game.balance < price) {
-                tg.showAlert(`❌ Нужно ещё ${Math.ceil(price - game.balance)} TON`);
+                showNotification(`❌ Нужно ещё ${Math.ceil(price - game.balance)} TON`);
             }
         }
         
-        // ============ TELEGRAM ФУНКЦИИ ============
+        // Авто-ферма
+        let autoFarmInterval;
+        function startAutoFarm() {
+            if (autoFarmInterval) clearInterval(autoFarmInterval);
+            
+            autoFarmInterval = setInterval(() => {
+                if (game.upgrades.farm > 0) {
+                    game.balance += game.upgrades.farm * 25;
+                    updateUI();
+                    saveGame();
+                }
+            }, 1000);
+        }
+        
+        // Покупка TON
         function buyTon() {
             tg.showPopup({
                 title: 'Купить TON',
@@ -388,38 +277,33 @@
                 buttons: [
                     {id: 'buy100', type: 'default', text: '100 TON - 0.5 TON'},
                     {id: 'buy500', type: 'default', text: '500 TON - 2 TON'},
-                    {id: 'buy1000', type: 'default', text: '1000 TON - 4 TON'},
                     {type: 'cancel'}
                 ]
             }, (btnId) => {
                 if (btnId === 'buy100') {
                     game.balance += 100;
-                    tg.showAlert('✅ Куплено 100 TON!');
+                    showNotification('✅ Куплено 100 TON!');
                     updateUI();
                     saveGame();
                 } else if (btnId === 'buy500') {
                     game.balance += 500;
-                    tg.showAlert('✅ Куплено 500 TON!');
-                    updateUI();
-                    saveGame();
-                } else if (btnId === 'buy1000') {
-                    game.balance += 1000;
-                    tg.showAlert('✅ Куплено 1000 TON!');
+                    showNotification('✅ Куплено 500 TON!');
                     updateUI();
                     saveGame();
                 }
             });
         }
         
+        // Поделиться
         function shareGame() {
             const url = window.location.href;
-            const text = '🎮 Качай TON до луны в TON Miner! Присоединяйся!';
+            const text = '🎮 Качай TON до луны!';
             
             tg.shareUrl(url, text, (shared) => {
                 if (shared) {
                     game.friends++;
                     game.balance += 100;
-                    tg.showAlert('🎉 +100 TON за друга!');
+                    showNotification('🎉 +100 TON за друга!');
                     updateUI();
                     saveGame();
                     checkAchievements();
@@ -427,125 +311,75 @@
             });
         }
         
-        function dailyBonus() {
-            const today = new Date().toDateString();
-            const lastBonus = localStorage.getItem('lastBonus');
-            
-            if (lastBonus !== today) {
-                const bonus = 100 + game.level * 20;
-                game.balance += bonus;
-                localStorage.setItem('lastBonus', today);
-                tg.showAlert(`🎁 Ежедневный бонус: ${bonus} TON!`);
-                updateUI();
-                saveGame();
-            } else {
-                tg.showAlert('🎁 Бонус уже получен сегодня! Завтра будет новый.');
-            }
-        }
-        
-        // ============ ДОСТИЖЕНИЯ ============
-        function initAchievements() {
-            const saved = tg.CloudStorage.getItem('tonAchievements');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    achievements.forEach(ach => {
-                        if (data[ach.id]) ach.unlocked = true;
-                    });
-                } catch(e) {}
-            }
-            updateAchievementsUI();
-        }
-        
+        // Достижения
         function checkAchievements() {
             let changed = false;
-            let unlockedCount = 0;
             
             achievements.forEach(ach => {
-                if (ach.unlocked) {
-                    unlockedCount++;
-                    return;
-                }
+                if (ach.unlocked) return;
                 
                 let progress = 0;
-                switch(ach.type) {
-                    case 'friends': progress = game.friends; break;
-                    case 'balance': progress = game.balance; break;
-                    case 'clicks': progress = game.totalClicks; break;
-                    case 'farms': progress = game.upgrades.farm; break;
-                    case 'gpus': progress = game.upgrades.gpu; break;
-                    case 'streak': progress = getStreakDays(); break;
-                    case 'speed': progress = checkSpeedRun(); break;
-                    case 'rich': progress = game.balance; break;
-                    case 'multiplier': progress = game.price / 1; break;
-                    case 'all': progress = unlockedCount; break;
-                    default: progress = game.price; break;
+                if (ach.type === 'clicks') {
+                    progress = game.totalClicks;
+                } else {
+                    progress = game.price;
                 }
                 
                 if (progress >= ach.goal) {
                     ach.unlocked = true;
                     changed = true;
-                    unlockedCount++;
                     
-                    // Выдаем награду
                     if (typeof ach.reward === 'number') {
                         game.balance += ach.reward;
-                        tg.showAlert(`🏆 "${ach.name}"! +${ach.reward} TON!`);
-                    } else {
-                        tg.showAlert(`🏆 "${ach.name}"! ${ach.reward}!`);
+                        showNotification(`🏆 "${ach.name}"! +${ach.reward} TON!`);
                     }
                     
-                    // Особые награды
-                    if (ach.id === 'legend_1000') {
-                        tg.showAlert('🎉 ВЫ ЛЕГЕНДА! Достигли $1000! Получаете 10 реальных TON!');
+                    // Особое достижение $1000
+                    if (ach.id === 'first_1000') {
+                        showNotification('🎉 ВЫ ЛЕГЕНДА! Достигли $1000!');
                     }
                 }
             });
             
             if (changed) {
-                saveAchievements();
-                updateAchievementsUI();
+                updateAchievements();
             }
         }
         
-        function updateAchievementsUI() {
+        function updateAchievements() {
             const container = document.getElementById('achievementsList');
-            const countElement = document.getElementById('achievementsCount');
-            
             if (!container) return;
             
             container.innerHTML = '';
-            let unlockedCount = 0;
             
             achievements.forEach(ach => {
-                if (ach.unlocked) unlockedCount++;
+                const progress = ach.type === 'clicks' ? game.totalClicks : game.price;
+                const percent = Math.min(100, (progress / ach.goal) * 100);
+                const unlocked = percent >= 100;
                 
                 const div = document.createElement('div');
-                div.className = `achievement-item ${ach.unlocked ? 'unlocked' : ''}`;
+                div.style.cssText = `
+                    background: ${unlocked ? 'rgba(0,255,100,0.2)' : 'rgba(255,255,255,0.1)'};
+                    border-radius: 10px;
+                    padding: 10px;
+                    margin: 5px 0;
+                    border-left: 4px solid ${unlocked ? '#00ff88' : '#0088ff'};
+                `;
+                
                 div.innerHTML = `
-                    <div style="font-size: 1.5em; margin-bottom: 5px;">${ach.emoji}</div>
-                    <div style="font-weight: bold; font-size: 0.9em;">${ach.name}</div>
-                    <div style="font-size: 0.7em; color: #888; margin: 3px 0;">${ach.desc}</div>
-                    <div style="font-size: 0.7em; color: #ffcc00;">${typeof ach.reward === 'number' ? `+${ach.reward} TON` : ach.reward}</div>
+                    <div style="font-weight: bold; color: ${unlocked ? '#00ff88' : 'white'}">${ach.name}</div>
+                    <div style="font-size: 0.8em; color: #aaa; margin: 2px 0;">${ach.desc}</div>
+                    <div style="font-size: 0.8em; color: #ffcc00;">Награда: +${ach.reward} TON</div>
+                    <div style="height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-top: 5px; overflow: hidden;">
+                        <div style="height: 100%; background: #00aaff; width: ${percent}%;"></div>
+                    </div>
                 `;
                 
                 container.appendChild(div);
             });
-            
-            if (countElement) {
-                countElement.textContent = `${unlockedCount}/${achievements.length}`;
-            }
         }
         
-        function saveAchievements() {
-            const data = {};
-            achievements.forEach(ach => {
-                if (ach.unlocked) data[ach.id] = true;
-            });
-            tg.CloudStorage.setItem('tonAchievements', JSON.stringify(data));
-        }
-        
-        // ============ ЦЕЛЬ $1000 ============
+        // Цель $1000
         function updateGoal() {
             const progress = (game.price / 1000) * 100;
             const progressElement = document.getElementById('goalProgress');
@@ -560,104 +394,38 @@
             }
         }
         
-        // ============ СЛОЖНОСТЬ ============
-        function updateDifficulty() {
-            const level = getDifficultyLevel();
-            const levelElement = document.getElementById('difficultyLevel');
-            const multiplierElement = document.getElementById('priceMultiplier');
+        // Уведомление
+        function showNotification(text) {
+            const notif = document.getElementById('notification');
+            notif.textContent = text;
+            notif.style.display = 'block';
             
-            if (levelElement) {
-                levelElement.textContent = level.name;
-                levelElement.style.color = level.color;
-            }
-            
-            if (multiplierElement) {
-                multiplierElement.textContent = `x${level.multiplier}`;
-            }
-            
-            // Применяем множитель сложности
-            const baseHashrate = 1 + (game.upgrades.gpu * 5);
-            game.hashrate = baseHashrate * level.multiplier;
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 2000);
         }
         
-        function getDifficultyLevel() {
-            for (let i = difficultyLevels.length - 1; i >= 0; i--) {
-                if (game.price >= difficultyLevels[i].minPrice) {
-                    return difficultyLevels[i];
-                }
-            }
-            return difficultyLevels[0];
-        }
-        
-        // ============ ВСПОМОГАТЕЛЬНЫЕ ============
-        function getStreakDays() {
-            const lastPlay = localStorage.getItem('lastPlayDate');
-            const today = new Date().toDateString();
-            
-            if (lastPlay === today) {
-                return parseInt(localStorage.getItem('playStreak') || '0');
-            } else if (lastPlay === getYesterday()) {
-                const streak = parseInt(localStorage.getItem('playStreak') || '0') + 1;
-                localStorage.setItem('playStreak', streak.toString());
-                localStorage.setItem('lastPlayDate', today);
-                return streak;
-            } else {
-                localStorage.setItem('playStreak', '1');
-                localStorage.setItem('lastPlayDate', today);
-                return 1;
-            }
-        }
-        
-        function getYesterday() {
-            const date = new Date();
-            date.setDate(date.getDate() - 1);
-            return date.toDateString();
-        }
-        
-        function checkSpeedRun() {
-            const startTime = localStorage.getItem('gameStartTime');
-            if (!startTime) {
-                localStorage.setItem('gameStartTime', Date.now().toString());
-                return 0;
-            }
-            
-            const hoursPlayed = (Date.now() - parseInt(startTime)) / (1000 * 60 * 60);
-            return game.price >= 100 && hoursPlayed <= 1 ? 100 : 0;
-        }
-        
-        // ============ АВТО-ФЕРМА ============
-        let autoFarmInterval;
-        function startAutoFarm() {
-            if (autoFarmInterval) clearInterval(autoFarmInterval);
-            
-            autoFarmInterval = setInterval(() => {
-                if (game.upgrades.farm > 0) {
-                    game.balance += game.upgrades.farm * 25;
-                    updateUI();
-                    saveGame();
-                }
-            }, 1000);
-        }
-        
-        // ============ ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ============
+        // Обновление UI
         function updateUI() {
             document.getElementById('price').textContent = '$' + game.price.toFixed(2);
             document.getElementById('balance').textContent = Math.floor(game.balance);
-            document.getElementById('hashrate').textContent = game.hashrate.toFixed(1);
+            document.getElementById('hashrate').textContent = game.hashrate;
             document.getElementById('friends').textContent = game.friends;
-            document.getElementById('level').textContent = game.level;
-            document.getElementById('clicks').textContent = game.totalClicks;
             document.getElementById('gpuPrice').textContent = Math.floor(50 * Math.pow(1.2, game.upgrades.gpu));
             document.getElementById('farmPrice').textContent = Math.floor(250 * Math.pow(1.3, game.upgrades.farm));
         }
         
-        // ============ СОХРАНЕНИЕ ============
+        // Сохранение
         function saveGame() {
             tg.CloudStorage.setItem('tonGame', JSON.stringify(game));
         }
         
-        // ============ ЗАПУСК ============
-        window.addEventListener('DOMContentLoaded', initGame);
+        // Запуск игры
+        window.addEventListener('DOMContentLoaded', () => {
+            loadGame();
+            // Проверяем достижения каждые 5 секунд
+            setInterval(checkAchievements, 5000);
+        });
     </script>
 </body>
 </html>
