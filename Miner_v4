@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TON Miner PRO</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #0088cc;
+            --secondary: #00cc88;
+            --danger: #ff4444;
+            --warning: #ffcc00;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --premium: #ffd700;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a2e);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .header h1 {
+            color: #00ffff;
+            font-size: 2.5em;
+            text-shadow: 0 0 15px #00ffff;
+            margin-bottom: 5px;
+        }
+        
+        .header .subtitle {
+            color: #88ffff;
+            opacity: 0.9;
+        }
+        
+        .price-container {
+            background: linear-gradient(135deg, rgba(0,40,60,0.8), rgba(0,20,40,0.9));
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px solid #00aaff;
+            box-shadow: 0 10px 30px rgba(0,170,255,0.3);
+            text-align: center;
+        }
+        
+        .price-label {
+            color: #88ddff;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .price {
+            font-size: 3.8em;
+            color: #00ffaa;
+            font-weight: 800;
+            margin: 15px 0;
+            text-shadow: 0 0 20px #00ffaa;
+            transition: all 0.3s;
+        }
+        
+        .chart {
+            font-family: monospace;
+            font-size: 1.2em;
+            color: #ffcc00;
+            margin: 15px 0;
+            letter-spacing: 2px;
+        }
+        
+        .main-btn {
+            width: 100%;
+            padding: 25px;
+            font-size: 1.8em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff3366, #cc33ff);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 10px 25px rgba(255,51,102,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .main-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 15px rgba(255,51,102,0.6);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 18px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-3px);
+        }
+        
+        .stat-label {
+            color: #88aaff;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .tabs {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 5px;
+            margin: 25px 0;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: #88aaff;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 12px;
+            white-space: nowrap;
+            min-width: 100px;
+        }
+        
+        .tab.active {
+            background: rgba(0,136,204,0.3);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .upgrade-card {
+            background: linear-gradient(135deg, rgba(0,100,200,0.25), rgba(0,50,150,0.35));
+            border-radius: 18px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid #0088ff;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upgrade-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 20px rgba(0,136,255,0.4);
+        }
+        
+        .upgrade-card:active {
+            transform: translateX(8px) scale(0.98);
+        }
+        
+        .upgrade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .upgrade-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upgrade-count {
+            background: rgba(0,255,255,0.2);
+            color: #00ffff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .upgrade-desc {
+            color: #88ccff;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .upgrade-price {
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 1.3em;
+            text-align: right;
+        }
+        
+        .tg-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 25px 0;
+        }
+        
+        .tg-btn {
+            background: linear-gradient(135deg, var(--primary), #0066aa);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 18px 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .tg-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .tg-btn.premium {
+            background: linear-gradient(135deg, var(--warning), #ff9900);
+        }
+        
+        .tg-btn.ton {
+            background: linear-gradient(135deg, var(--secondary), #00aa66);
+        }
+        
+        .progress-container {
+            margin: 15px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: #88aaff;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            border-radius: 5px;
+            transition: width 0.5s;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            color: #003311;
+            padding: 18px 25px;
+            border-radius: 15px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,255,136,0.4);
+            animation: slideDown 0.3s ease-out;
+            display: none;
+            text-align: center;
+            border: 2px solid #00aa55;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            border-color: #ff0000;
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+            color: #332200;
+            border-color: #ff9900;
+        }
+        
+        @media (max-width: 400px) {
+            .price { font-size: 3em; }
+            .main-btn { font-size: 1.5em; padding: 20px; }
+            .tg-buttons { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- УВЕДОМЛЕНИЯ -->
+    <div class="notification" id="notification"></div>
+    
+    <div class="container">
+        <!-- ШАПКА -->
+        <div class="header">
+            <h1>🚀 TON MINER PRO</h1>
+            <div class="subtitle">Качай цену TON до луны!</div>
+        </div>
+        
+        <!-- ИНФО ИГРОКА -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">👤 Игрок</div>
+                <div class="stat-value" id="playerName">Загрузка...</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">💰 Баланс</div>
+                <div class="stat-value" id="balance">0 TON</div>
+            </div>
+        </div>
+        
+        <!-- ЦЕНА TON -->
+        <div class="price-container">
+            <div class="price-label">💰 ЦЕНА TON</div>
+            <div class="price" id="price">$1.00</div>
+            <div class="chart" id="chart">[▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆]</div>
+            <div class="price-label">📈 +<span id="growthRate">0.01</span>/клик</div>
+        </div>
+        
+        <!-- ОСНОВНАЯ КНОПКА -->
+        <button class="main-btn" onclick="clickTon()">
+            <span>🚀</span>
+            <span>НАКАЧАТЬ TON</span>
+        </button>
+        
+        <!-- ВКЛАДКИ -->
+        <div class="tabs" id="tabs">
+            <button class="tab active" onclick="switchTab('upgrades')">⚡ УЛУЧШЕНИЯ</button>
+            <button class="tab" onclick="switchTab('top')">🏆 ТОП ИГРОКИ</button>
+            <button class="tab" onclick="switchTab('tournaments')">⚔️ ТУРНИРЫ</button>
+            <button class="tab" onclick="switchTab('clans')">👥 КЛАНЫ</button>
+        </div>
+        
+        <!-- ВКЛАДКА: УЛУЧШЕНИЯ -->
+        <div class="tab-content active" id="upgradesTab">
+            <div class="upgrade-card" onclick="buyUpgrade('gpu')">
+                <div class="upgrade-header">
+                    <div class="upgrade-name">
+                        <span>💻</span>
+                        <span>Видеокарта</span>
+                    </div>
+                    <div class="upgrade-count" id="gpuCount">0</div>
+                </div>
+                <div class="upgrade-desc">
+                    +5 GH/s, +0.3% к цене за клик
+                </div>
+                <div class="upgrade-price" id="gpuPrice">50 TON</div>
+            </div>
+            
+            <div class="upgrade-card" onclick="buyUpgrade('farm')">
+                <div class="upgrade-header">
+                    <div class="upgrade-name">
+                        <span>🌐</span>
+                        <span>Майнинг-ферма</span>
+                    </div>
+                    <div class="upgrade-count" id="farmCount">0</div>
+                </div>
+                <div class="upgrade-desc">
+                    +25 GH/s авто-добычи, +1% к цене
+                </div>
+                <div class="upgrade-price" id="farmPrice">250 TON</div>
+            </div>
+            
+            <div class="upgrade-card" onclick="buyUpgrade('bot')" id="botUpgrade">
+                <div class="upgrade-header">
+                    <div class="upgrade-name">
+                        <span>🤖</span>
+                        <span>Торговый бот</span>
+                    </div>
+                    <div class="upgrade-count" id="botCount">0</div>
+                </div>
+                <div class="upgrade-desc">
+                    x2 к силе кликов, авто-рост цены
+                </div>
+                <div class="upgrade-price" id="botPrice">500 TON</div>
+            </div>
+            
+            <div class="upgrade-card" onclick="buyUpgrade('exchange')" id="exchangeUpgrade">
+                <div class="upgrade-header">
+                    <div class="upgrade-name">
+                        <span>🏦</span>
+                        <span>Криптобиржа</span>
+                    </div>
+                    <div class="upgrade-count" id="exchangeCount">0</div>
+                </div>
+                <div class="upgrade-desc">
+                    x3 к авто-добыче, +5% к цене
+                </div>
+                <div class="upgrade-price" id="exchangePrice">2,000 TON</div>
+            </div>
+            
+            <div class="upgrade-card" onclick="buyUpgrade('satellite')" id="satelliteUpgrade">
+                <div class="upgrade-header">
+                    <div class="upgrade-name">
+                        <span>🛰️</span>
+                        <span>Спутниковый майнинг</span>
+                    </div>
+                    <div class="upgrade-count" id="satelliteCount">0</div>
+                </div>
+                <div class="upgrade-desc">
+                    x10 ко всем доходам, VIP статус
+                </div>
+                <div class="upgrade-price" id="satellitePrice">10,000 TON</div>
+            </div>
+        </div>
+        
+        <!-- ВКЛАДКА: ТОП ИГРОКИ -->
+        <div class="tab-content" id="topTab">
+            <div style="text-align: center; padding: 30px; color: #88aaff;">
+                <div style="font-size: 3em; margin-bottom: 20px;">🏆</div>
+                <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">
+                    ТОП ИГРОКОВ ПО ДОБЫЧЕ TON
+                </div>
+                <div style="color: #aaa; margin-bottom: 30px;">
+                    Рейтинг обновляется каждые 24 часа
+                </div>
+                
+                <div id="topPlayersList">
+                    <!-- Топ игроков будет загружен здесь -->
+                    <div style="color: #888; text-align: center; padding: 20px;">
+                        Загрузка рейтинга...
+                    </div>
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <div style="color: #88aaff; margin-bottom: 10px;">Ваше место в рейтинге:</div>
+                    <div style="font-size: 2em; color: #00ffaa; font-weight: bold;" id="playerRank">#0</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ВКЛАДКА: ТУРНИРЫ -->
+        <div class="tab-content" id="tournamentsTab">
+            <div style="text-align: center; padding: 30px; color: #88aaff;">
+                <div style="font-size: 3em; margin-bottom: 20px;">⚔️</div>
+                <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">
+                    ЕЖЕДНЕВНЫЕ ТУРНИРЫ
+                </div>
+                <div style="color: #aaa; margin-bottom: 30px;">
+                    Соревнуйся с другими игроками за награды
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Текущий турнир</span>
+                        <span id="tournamentProgress">00:00:00</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%"></div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid" style="margin: 30px 0;">
+                    <div class="stat-card">
+                        <div class="stat-label">🎯 Твоё место</div>
+                        <div class="stat-value" id="tournamentPosition">#0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">💰 Призовой фонд</div>
+                        <div class="stat-value" id="tournamentPrize">5,000 TON</div>
+                    </div>
+                </div>
+                
+                <button class="tg-btn" onclick="joinTournament()" style="margin-top: 20px;">
+                    <span>⚔️</span>
+                    <span>УЧАСТВОВАТЬ (100 TON)</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- ВКЛАДКА: КЛАНЫ -->
+        <div class="tab-content" id="clansTab">
+            <div style="text-align: center; padding: 30px; color: #88aaff;">
+                <div style="font-size: 3em; margin-bottom: 20px;">👥</div>
+                <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">
+                    КЛАНЫ И АЛЬЯНСЫ
+                </div>
+                <div style="color: #aaa; margin-bottom: 30px;">
+                    Объединяйся с друзьями для бонусов
+                </div>
+                
+                <div id="clansList">
+                    <div style="color: #888; text-align: center; padding: 20px;">
+                        Кланы скоро появятся...
+                    </div>
+                </div>
+                
+                <button class="tg-btn" onclick="createClan()" style="width: 100%; margin: 15px 0;">
+                    <span>🛡️</span>
+                    <span>СОЗДАТЬ КЛАН (1000 TON)</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- ПРОГРЕСС ИГРЫ -->
+        <div class="progress-container">
+            <div class="progress-label">
+                <span>🏆 Цель: $1,000</span>
+                <span id="goalProgress">0.1%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="goalBar" style="width: 0.1%"></div>
+            </div>
+        </div>
+        
+        <!-- TELEGRAM КНОПКИ -->
+        <div class="tg-buttons">
+            <button class="tg-btn ton" onclick="buyWithTon()">
+                <span>💰</span>
+                <span>Купить TON</span>
+            </button>
+            
+            <button class="tg-btn" onclick="inviteFriend()">
+                <span>👥</span>
+                <span>Пригласить</span>
+            </button>
+            
+            <button class="tg-btn premium" onclick="activatePremium()">
+                <span>⭐</span>
+                <span>Premium</span>
+            </button>
+            
+            <button class="tg-btn" onclick="dailyBonus()">
+                <span>🎁</span>
+                <span>Бонус</span>
+            </button>
+        </div>
+        
+        <!-- СТАТИСТИКА -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">⚡ Хешрейт</div>
+                <div class="stat-value" id="hashrate">1 GH/s</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">👥 Друзей</div>
+                <div class="stat-value" id="friends">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">📊 Уровень</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🤖 Авто-добыча</div>
+                <div class="stat-value" id="autoIncome">0/сек</div>
+            </div>
+        </div>
+        
+        <!-- ФУТЕР -->
+        <div style="text-align: center; margin-top: 30px; color: #88aaff; font-size: 0.9em;">
+            🎮 Прогресс автоматически сохраняется
+        </div>
+    </div>
+
+    <script>
+        // ============ ТЕЛЕГРАМ ИНИЦИАЛИЗАЦИЯ ============
+        let tg = window.Telegram.WebApp;
+        let isTelegram = false;
+        let userId = null;
+        let playerName = "Игрок";
+        
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            isTelegram = true;
+            tg.expand();
+            tg.ready();
+            userId = tg.initDataUnsafe.user.id.toString();
+            playerName = tg.initDataUnsafe.user.first_name || "Игрок";
+            console.log('✅ Запущено в Telegram, ID:', userId);
+        } else {
+            // Для браузера
+            let browserId = localStorage.getItem('browser_user_id');
+            if (!browserId) {
+                browserId = 'browser_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('browser_user_id', browserId);
+            }
+            userId = browserId;
+            console.log('🌐 Запущено в браузере, ID:', userId);
+        }
+        
+        document.getElementById('playerName').textContent = playerName;
+        
+        // ============ ИГРА ============
+        let game = {
+            version: '3.2',
+            price: 1.00,
+            balance: 100,
+            hashrate: 1,
+            level: 1,
+            friends: 0,
+            totalClicks: 0,
+            totalEarned: 0,
+            totalMined: 0,
+            bestPrice: 1.00,
+            
+            upgrades: {
+                gpu: 0,
+                farm: 0,
+                bot: false,
+                exchange: false,
+                satellite: false
+            },
+            
+            premium: {
+                active: false,
+                type: null,
+                expires: null
+            },
+            
+            tournament: {
+                joined: false,
+                score: 0,
+                position: 0,
+                prize: 0,
+                endTime: null
+            },
+            
+            clan: {
+                id: null,
+                name: '',
+                role: null,
+                joined: false,
+                memberSince: null
+            },
+            
+            referrals: {
+                count: 0,
+                earned: 0,
+                list: []
+            },
+            
+            purchases: {
+                totalSpent: 0,
+                lastPurchase: null,
+                tonBought: 0
+            },
+            
+            lastSave: new Date().toISOString(),
+            created: new Date().toISOString()
+        };
+        
+        // ============ ЗАГРУЗКА И СОХРАНЕНИЕ ============
+        function loadGame() {
+            console.log('🔄 Загрузка игры для:', userId);
+            
+            let savedData = null;
+            const storageKey = `tonminer_${userId}`;
+            
+            // Пробуем загрузить из localStorage
+            try {
+                const saved = localStorage.getItem(storageKey);
+                if (saved) {
+                    savedData = JSON.parse(saved);
+                    console.log('📁 Найдено локальное сохранение');
+                }
+            } catch (e) {
+                console.log('❌ Ошибка загрузки из localStorage:', e);
+            }
+            
+            // Если в Telegram, пробуем Cloud Storage
+            if (isTelegram && tg.CloudStorage) {
+                tg.CloudStorage.getItem(storageKey, (err, data) => {
+                    if (!err && data) {
+                        try {
+                            const cloudData = JSON.parse(data);
+                            // Если облачные данные новее, используем их
+                            if (!savedData || (cloudData.lastSave > savedData.lastSave)) {
+                                savedData = cloudData;
+                                console.log('☁️ Используем облачное сохранение');
+                            }
+                        } catch (e) {
+                            console.log('❌ Ошибка парсинга облачного сохранения:', e);
+                        }
+                    }
+                    processLoadedData(savedData);
+                });
+            } else {
+                processLoadedData(savedData);
+            }
+        }
+        
+        function processLoadedData(savedData) {
+            if (savedData && savedData.version) {
+                // Миграция с предыдущих версий
+                if (parseFloat(savedData.version) < 3.0) {
+                    // Старые версии - сбрасываем и даем бонус
+                    game.balance = 200; // Бонус за миграцию
+                    showNotification('🎁 Обновление игры! Получили 200 TON за миграцию!', 'success');
+                } else {
+                    // Новые версии - переносим данные
+                    game.balance = savedData.balance || game.balance;
+                    game.price = savedData.price || game.price;
+                    game.hashrate = savedData.hashrate || game.hashrate;
+                    game.level = savedData.level || game.level;
+                    game.friends = savedData.friends || game.friends;
+                    game.totalClicks = savedData.totalClicks || game.totalClicks;
+                    game.totalEarned = savedData.totalEarned || game.totalEarned;
+                    game.totalMined = savedData.totalMined || game.totalMined;
+                    game.bestPrice = savedData.bestPrice || game.bestPrice;
+                    
+                    if (savedData.upgrades) {
+                        game.upgrades = savedData.upgrades;
+                    }
+                    if (savedData.premium) {
+                        game.premium = savedData.premium;
+                    }
+                    if (savedData.clan) {
+                        game.clan = savedData.clan;
+                    }
+                    if (savedData.referrals) {
+                        game.referrals = savedData.referrals;
+                    }
+                    
+                    console.log('✅ Игра загружена, баланс:', game.balance);
+                }
+            } else {
+                console.log('🎮 Новая игра, первый запуск');
+                game.balance = 100; // Стартовый бонус
+                game.created = new Date().toISOString();
+                saveGame();
+            }
+            
+            initGame();
+        }
+        
+        function saveGame() {
+            game.lastSave = new Date().toISOString();
+            const storageKey = `tonminer_${userId}`;
+            const gameData = JSON.stringify(game);
+            
+            // Сохраняем в localStorage
+            try {
+                localStorage.setItem(storageKey, gameData);
+            } catch (e) {
+                console.log('❌ Ошибка сохранения в localStorage:', e);
+            }
+            
+            // Если в Telegram, сохраняем в Cloud Storage
+            if (isTelegram && tg.CloudStorage) {
+                tg.CloudStorage.setItem(storageKey, gameData, (err) => {
+                    if (err) {
+                        console.log('❌ Ошибка сохранения в Cloud Storage:', err);
+                    } else {
+                        console.log('💾 Игра сохранена в облаке');
+                    }
+                });
+            }
+        }
+        
+        // ============ ОСНОВНЫЕ ФУНКЦИИ ============
+        function initGame() {
+            updateUI();
+            updateGoal();
+            unlockUpgrades();
+            
+            // Запускаем авто-ферму если есть
+            if (game.upgrades.farm > 0) {
+                startAutoFarm();
+            }
+            
+            // Запускаем авто-клики если есть бот
+            if (game.upgrades.bot) {
+                startAutoClicks();
+            }
+            
+            // Запускаем авто-трейдинг если есть биржа
+            if (game.upgrades.exchange) {
+                startAutoTrading();
+            }
+            
+            // Запускаем таймеры
+            setInterval(updateUI, 1000);
+            startTournamentTimer();
+            
+            // Показываем приветствие
+            setTimeout(() => {
+                showNotification('🎮 Добро пожаловать в TON Miner PRO!', 'success');
+            }, 1000);
+        }
+        
+        function clickTon() {
+            game.totalClicks++;
+            
+            // Базовая сила клика
+            let clickPower = 0.01;
+            let hashPower = game.hashrate;
+            
+            // Бонусы от улучшений
+            clickPower += game.upgrades.gpu * 0.003;
+            hashPower += game.upgrades.gpu * 5;
+            
+            if (game.upgrades.bot) {
+                clickPower *= 2;
+            }
+            
+            if (game.upgrades.exchange) {
+                clickPower *= 1.5;
+            }
+            
+            if (game.upgrades.satellite) {
+                clickPower *= 10;
+                hashPower *= 10;
+            }
+            
+            // Бонус от Premium
+            if (game.premium.active) {
+                if (game.premium.type === 'pro') {
+                    clickPower *= 3;
+                    hashPower *= 1.5;
+                } else if (game.premium.type === 'vip') {
+                    clickPower *= 5;
+                    hashPower *= 2;
+                }
+            }
+            
+            // Бонус от клана
+            if (game.clan.joined) {
+                clickPower *= 1.05;
+                hashPower *= 1.05;
+            }
+            
+            // Увеличиваем цену TON
+            game.price += clickPower + (Math.random() * 0.01);
+            if (game.price > game.bestPrice) {
+                game.bestPrice = game.price;
+            }
+            
+            // Добываем TON
+            const mined = hashPower * (1 + game.friends * 0.1);
+            game.balance += mined;
+            game.totalEarned += mined;
+            game.totalMined += mined;
+            
+            // Случайные ивенты
+            if (Math.random() < 0.03) {
+                const pump = 0.1 + (game.upgrades.gpu * 0.01);
+                game.price *= (1 + pump);
+                showNotification(`📈 ПАМП! Цена +${(pump*100).toFixed(1)}%!`, 'success');
+            }
+            
+            updateUI();
+            updateGoal();
+            saveGame();
+            
+            // Анимация
+            const priceEl = document.getElementById('price');
+            priceEl.style.transform = 'scale(1.15)';
+            setTimeout(() => priceEl.style.transform = 'scale(1)', 150);
+        }
+        
+        // ============ УЛУЧШЕНИЯ ============
+        function buyUpgrade(type) {
+            let price = 0;
+            let message = '';
+            let canBuy = false;
+            
+            switch(type) {
+                case 'gpu':
+                    price = Math.floor(50 * Math.pow(1.25, game.upgrades.gpu));
+                    if (game.balance >= price) {
+                        game.balance -= price;
+                        game.upgrades.gpu++;
+                        game.hashrate += 5;
+                        message = '💻 Видеокарта куплена! +5 GH/s';
+                        canBuy = true;
+                    }
+                    break;
+                    
+                case 'farm':
+                    price = Math.floor(250 * Math.pow(1.3, game.upgrades.farm));
+                    if (game.balance >= price) {
+                        game.balance -= price;
+                        game.upgrades.farm++;
+                        message = '🌐 Майнинг-ферма куплена! Авто-добыча запущена';
+                        canBuy = true;
+                        startAutoFarm();
+                    }
+                    break;
+                    
+                case 'bot':
+                    price = 500;
+                    if (!game.upgrades.bot && game.balance >= price) {
+                        game.balance -= price;
+                        game.upgrades.bot = true;
+                        message = '🤖 Торговый бот активирован! Клики x2!';
+                        canBuy = true;
+                        startAutoClicks();
+                    }
+                    break;
+                    
+                case 'exchange':
+                    price = 2000;
+                    if (!game.upgrades.exchange && game.balance >= price) {
+                        game.balance -= price;
+                        game.upgrades.exchange = true;
+                        message = '🏦 Криптобиржа куплена! Доход x3!';
+                        canBuy = true;
+                        startAutoTrading();
+                    }
+                    break;
+                    
+                case 'satellite':
+                    price = 10000;
+                    if (!game.upgrades.satellite && game.balance >= price) {
+                        game.balance -= price;
+                        game.upgrades.satellite = true;
+                        message = '🛰️ СПУТНИК АКТИВИРОВАН! ВСЕ ДОХОДЫ x10!';
+                        canBuy = true;
+                    }
+                    break;
+            }
+            
+            if (canBuy) {
+                showNotification(message, 'success');
+                updateUI();
+                saveGame();
+                unlockUpgrades();
+            } else if (price > 0) {
+                showNotification(`❌ Нужно ещё ${Math.ceil(price - game.balance)} TON`, 'error');
+            }
+        }
+        
+        function unlockUpgrades() {
+            if (game.price >= 5 && !game.upgrades.bot) {
+                document.getElementById('botUpgrade').style.display = 'block';
+            }
+            
+            if (game.price >= 20 && !game.upgrades.exchange) {
+                document.getElementById('exchangeUpgrade').style.display = 'block';
+            }
+            
+            if (game.price >= 50 && !game.upgrades.satellite) {
+                document.getElementById('satelliteUpgrade').style.display = 'block';
+            }
+        }
+        
+        // ============ АВТО-СИСТЕМЫ ============
+        let autoFarmInterval;
+        function startAutoFarm() {
+            if (autoFarmInterval) clearInterval(autoFarmInterval);
+            
+            autoFarmInterval = setInterval(() => {
+                if (game.upgrades.farm > 0) {
+                    let farmPower = game.upgrades.farm * 25;
+                    
+                    if (game.upgrades.exchange) farmPower *= 3;
+                    if (game.upgrades.satellite) farmPower *= 10;
+                    if (game.premium.active) farmPower *= 2;
+                    
+                    game.balance += farmPower;
+                    game.totalEarned += farmPower;
+                    game.totalMined += farmPower;
+                    updateUI();
+                    saveGame();
+                }
+            }, 1000);
+        }
+        
+        let autoClickInterval;
+        function startAutoClicks() {
+            if (autoClickInterval) clearInterval(autoClickInterval);
+            
+            autoClickInterval = setInterval(() => {
+                if (game.upgrades.bot) {
+                    for (let i = 0; i < 5; i++) {
+                        game.totalClicks++;
+                        game.price += 0.002;
+                        game.balance += game.hashrate * 0.2;
+                        game.totalMined += game.hashrate * 0.2;
+                    }
+                    updateUI();
+                    saveGame();
+                }
+            }, 1000);
+        }
+        
+        let autoTradeInterval;
+        function startAutoTrading() {
+            if (autoTradeInterval) clearInterval(autoTradeInterval);
+            
+            autoTradeInterval = setInterval(() => {
+                if (game.upgrades.exchange) {
+                    const profit = Math.random() * 10 - 3;
+                    game.balance += profit;
+                    game.totalMined += profit;
+                    
+                    if (profit > 5) {
+                        showNotification(`📈 Удачная сделка: +${profit.toFixed(2)} TON`, 'success');
+                    }
+                    
+                    updateUI();
+                    saveGame();
+                }
+            }, 5000);
+        }
+        
+        // ============ ТУРНИРЫ ============
+        let tournamentInterval;
+        function startTournamentTimer() {
+            if (!game.tournament.endTime) {
+                game.tournament.endTime = Date.now() + 24 * 60 * 60 * 1000;
+            }
+            
+            updateTournamentTimer();
+            
+            if (tournamentInterval) clearInterval(tournamentInterval);
+            tournamentInterval = setInterval(updateTournamentTimer, 1000);
+        }
+        
+        function updateTournamentTimer() {
+            const now = Date.now();
+            const timeLeft = game.tournament.endTime - now;
+            
+            if (timeLeft <= 0) {
+                endTournament();
+                return;
+            }
+            
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            document.getElementById('tournamentProgress').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function joinTournament() {
+            if (game.balance < 100) {
+                showNotification('❌ Нужно 100 TON для участия', 'error');
+                return;
+            }
+            
+            game.balance -= 100;
+            game.tournament.joined = true;
+            game.tournament.score = game.totalMined;
+            game.tournament.prize = 5000;
+            game.tournament.position = Math.floor(Math.random() * 50) + 1;
+            
+            showNotification('⚔️ Вы участвуете в турнире! Удачи!', 'success');
+            updateUI();
+            saveGame();
+        }
+        
+        function endTournament() {
+            if (game.tournament.joined) {
+                if (game.tournament.position <= 3) {
+                    const prize = game.tournament.prize / (4 - game.tournament.position);
+                    game.balance += prize;
+                    showNotification(`🏆 ТУРНИР ОКОНЧЕН! Вы выиграли ${formatNumber(prize)} TON!`, 'success');
+                }
+            }
+            
+            game.tournament = {
+                joined: false,
+                score: 0,
+                position: 0,
+                prize: 5000 + Math.floor(Math.random() * 5000),
+                endTime: Date.now() + 24 * 60 * 60 * 1000
+            };
+            
+            updateUI();
+            saveGame();
+        }
+        
+        // ============ КЛАНЫ ============
+        function createClan() {
+            if (game.balance < 1000) {
+                showNotification('❌ Нужно 1000 TON для создания клана', 'error');
+                return;
+            }
+            
+            const clanName = prompt('Введите название клана (3-20 символов):');
+            if (!clanName || clanName.length < 3 || clanName.length > 20) {
+                showNotification('❌ Название должно быть от 3 до 20 символов', 'error');
+                return;
+            }
+            
+            game.balance -= 1000;
+            game.clan = {
+                id: 'clan_' + Date.now(),
+                name: clanName,
+                role: 'leader',
+                joined: true,
+                memberSince: new Date().toISOString()
+            };
+            
+            showNotification(`🛡️ Клан "${clanName}" создан!`, 'success');
+            updateUI();
+            saveGame();
+        }
+        
+        // ============ TELEGRAM ФУНКЦИИ ============
+        function buyWithTon() {
+            if (!isTelegram) {
+                showNotification('💰 Покупка TON доступна в Telegram', 'warning');
+                return;
+            }
+            
+            tg.showPopup({
+                title: '💎 ПРЕМИУМ ПАКЕТЫ',
+                message: 'Выберите пакет:',
+                buttons: [
+                    {id: 'starter', type: 'default', text: 'СТАРТЕР: 1000 TON + буст'},
+                    {id: 'pro', type: 'default', text: 'PRO: 5000 TON + x2 доход'},
+                    {id: 'vip', type: 'default', text: 'VIP: 20000 TON + всё x3'},
+                    {type: 'cancel'}
+                ]
+            }, (btnId) => {
+                if (btnId === 'starter') {
+                    game.balance += 1000;
+                    game.hashrate *= 1.5;
+                    showNotification('💎 СТАРТЕР пакет активирован!', 'success');
+                } else if (btnId === 'pro') {
+                    game.balance += 5000;
+                    game.hashrate *= 2;
+                    showNotification('🚀 PRO пакет активирован!', 'success');
+                } else if (btnId === 'vip') {
+                    game.balance += 20000;
+                    game.hashrate *= 3;
+                    showNotification('👑 VIP пакет активирован! ВСЁ x3!', 'success');
+                }
+                updateUI();
+                saveGame();
+            });
+        }
+        
+        function inviteFriend() {
+            let refLink = '';
+            
+            if (isTelegram) {
+                refLink = `https://t.me/ton_miner2_bot?start=ref${userId}`;
+                tg.shareUrl(refLink, '🎮 Играй в TON Miner PRO!', (shared) => {
+                    if (shared) {
+                        game.friends++;
+                        game.balance += 100;
+                        showNotification('👥 Друг приглашён! +100 TON', 'success');
+                        updateUI();
+                        saveGame();
+                    }
+                });
+            } else {
+                refLink = window.location.href + '?ref=' + userId;
+                navigator.clipboard.writeText(refLink);
+                showNotification('📋 Ссылка скопирована! Пришлите её друзьям', 'success');
+            }
+        }
+        
+        function activatePremium() {
+            if (!isTelegram) {
+                showNotification('⭐ Premium доступен в Telegram', 'warning');
+                return;
+            }
+            
+            tg.showPopup({
+                title: '⭐ PREMIUM ДОСТУП',
+                message: 'Разблокируй Premium на 30 дней:',
+                buttons: [
+                    {id: 'buyPremium', type: 'default', text: 'КУПИТЬ - 10 TON'},
+                    {type: 'cancel'}
+                ]
+            }, (btnId) => {
+                if (btnId === 'buyPremium') {
+                    if (game.balance >= 10) {
+                        game.balance -= 10;
+                        game.premium = {
+                            active: true,
+                            type: 'pro',
+                            expires: Date.now() + 30 * 24 * 60 * 60 * 1000
+                        };
+                        showNotification('⭐ PREMIUM АКТИВИРОВАН!', 'success');
+                        updateUI();
+                        saveGame();
+                    } else {
+                        showNotification('❌ Недостаточно TON для Premium', 'error');
+                    }
+                }
+            });
+        }
+        
+        function dailyBonus() {
+            const today = new Date().toDateString();
+            const lastBonus = localStorage.getItem(`daily_bonus_${userId}`);
+            
+            if (lastBonus !== today) {
+                let bonus = 500 + (game.level * 100);
+                
+                if (game.premium.active) {
+                    bonus *= 2;
+                }
+                
+                game.balance += bonus;
+                localStorage.setItem(`daily_bonus_${userId}`, today);
+                showNotification(`🎁 ЕЖЕДНЕВНЫЙ БОНУС: ${formatNumber(bonus)} TON!`, 'success');
+                updateUI();
+                saveGame();
+            } else {
+                showNotification('🎁 Бонус уже получен сегодня!', 'warning');
+            }
+        }
+        
+        // ============ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ============
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Обновляем контент вкладки
+            if (tabName === 'top') {
+                updateTopPlayers();
+            }
+        }
+        
+        function updateUI() {
+            // Цена и график
+            document.getElementById('price').textContent = '$' + game.price.toFixed(2);
+            document.getElementById('balance').textContent = formatNumber(game.balance) + ' TON';
+            document.getElementById('hashrate').textContent = formatNumber(game.hashrate) + ' GH/s';
+            document.getElementById('friends').textContent = game.friends;
+            document.getElementById('level').textContent = game.level;
+            
+            // Рост цены
+            let growth = 0.01 + (game.upgrades.gpu * 0.003);
+            if (game.upgrades.bot) growth *= 2;
+            if (game.upgrades.satellite) growth *= 10;
+            document.getElementById('growthRate').textContent = growth.toFixed(3);
+            
+            // График
+            const maxPrice = 1000;
+            const chartWidth = Math.min(20, Math.floor((game.price / maxPrice) * 20));
+            document.getElementById('chart').textContent = 
+                '[' + '▆'.repeat(chartWidth) + ' '.repeat(20 - chartWidth) + ']';
+            
+            // Улучшения
+            document.getElementById('gpuCount').textContent = game.upgrades.gpu;
+            document.getElementById('farmCount').textContent = game.upgrades.farm;
+            document.getElementById('botCount').textContent = game.upgrades.bot ? '✓' : '0';
+            document.getElementById('exchangeCount').textContent = game.upgrades.exchange ? '✓' : '0';
+            document.getElementById('satelliteCount').textContent = game.upgrades.satellite ? '✓' : '0';
+            
+            document.getElementById('gpuPrice').textContent = formatNumber(Math.floor(50 * Math.pow(1.25, game.upgrades.gpu))) + ' TON';
+            document.getElementById('farmPrice').textContent = formatNumber(Math.floor(250 * Math.pow(1.3, game.upgrades.farm))) + ' TON';
+            document.getElementById('botPrice').textContent = '500 TON';
+            document.getElementById('exchangePrice').textContent = '2,000 TON';
+            document.getElementById('satellitePrice').textContent = '10,000 TON';
+            
+            // Авто-добыча
+            let autoPower = game.upgrades.farm * 25;
+            if (game.upgrades.exchange) autoPower *= 3;
+            if (game.upgrades.satellite) autoPower *= 10;
+            document.getElementById('autoIncome').textContent = formatNumber(autoPower) + '/сек';
+            
+            // Турнир
+            if (game.tournament.joined) {
+                game.tournament.score = game.totalMined;
+                document.getElementById('tournamentPosition').textContent = '#' + game.tournament.position;
+                document.getElementById('tournamentPrize').textContent = formatNumber(game.tournament.prize) + ' TON';
+            }
+        }
+        
+        function updateGoal() {
+            const progress = (game.price / 1000) * 100;
+            document.getElementById('goalProgress').textContent = progress.toFixed(1) + '%';
+            document.getElementById('goalBar').style.width = Math.min(100, progress) + '%';
+            
+            if (game.price >= 1000 && !game.achievedGoal) {
+                game.achievedGoal = true;
+                game.balance += 10000;
+                showNotification('🏆 ПОБЕДА! Вы достигли $1000! +10,000 TON!', 'success');
+                saveGame();
+            }
+        }
+        
+        function updateTopPlayers() {
+            // В реальном приложении здесь будет загрузка с сервера
+            const topPlayers = [
+                { name: 'TON King 👑', ton: 1254300, premium: true },
+                { name: 'Crypto Pro 🚀', ton: 987500, premium: true },
+                { name: 'Miner Master ⚡', ton: 765200, premium: false },
+                { name: 'Blockchain Guru 💎', ton: 543100, premium: true },
+                { name: 'TON Hunter 🏹', ton: 432500, premium: false }
+            ];
+            
+            const container = document.getElementById('topPlayersList');
+            container.innerHTML = '';
+            
+            topPlayers.forEach((player, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🔸';
+                const playerEl = document.createElement('div');
+                playerEl.style.display = 'flex';
+                playerEl.style.justifyContent = 'space-between';
+                playerEl.style.alignItems = 'center';
+                playerEl.style.padding = '12px';
+                playerEl.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+                
+                playerEl.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; 
+                             background: ${index < 3 ? 'linear-gradient(135deg, gold, orange)' : 'rgba(0,136,204,0.3)'}; 
+                             border-radius: 50%; font-weight: bold;">
+                            ${index + 1}
+                        </div>
+                        <div>
+                            <div style="font-weight: bold;">${player.name}</div>
+                            <div style="font-size: 0.8em; color: #88aaff;">${player.premium ? '⭐ Premium' : ''}</div>
+                        </div>
+                    </div>
+                    <div style="font-weight: bold; color: #00ffaa;">${formatNumber(player.ton)} TON</div>
+                `;
+                
+                container.appendChild(playerEl);
+            });
+            
+            // Позиция игрока
+            const playerScore = game.totalMined;
+            let playerRank = 6;
+            for (let i = 0; i < topPlayers.length; i++) {
+                if (playerScore > topPlayers[i].ton) {
+                    playerRank = i + 1;
+                    break;
+                }
+            }
+            document.getElementById('playerRank').textContent = '#' + playerRank;
+        }
+        
+        function showNotification(text, type = 'success') {
+            const notif = document.getElementById('notification');
+            notif.textContent = text;
+            notif.className = 'notification';
+            
+            if (type === 'error') {
+                notif.classList.add('error');
+            } else if (type === 'warning') {
+                notif.classList.add('warning');
+            }
+            
+            notif.style.display = 'block';
+            
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 3000);
+        }
+        
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return Math.floor(num);
+        }
+        
+        // ============ ЗАПУСК ИГРЫ ============
+        window.addEventListener('DOMContentLoaded', () => {
+            loadGame();
+        });
+    </script>
+</body>
+</html>
