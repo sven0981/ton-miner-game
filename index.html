@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TON Miner Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #0a0a0a; color: white; padding: 20px; min-height: 100vh; }
+        .container { max-width: 100%; }
+        h1 { color: #00ffff; text-align: center; margin: 20px 0; text-shadow: 0 0 10px #00ffff; }
+        .price { font-size: 48px; color: #00ff88; text-align: center; margin: 20px 0; font-weight: bold; }
+        button { width: 100%; padding: 20px; font-size: 24px; background: linear-gradient(45deg, #ff0088, #8800ff); color: white; border: none; border-radius: 15px; margin: 10px 0; cursor: pointer; }
+        .stats { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .upgrade { background: rgba(0,100,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; border: 1px solid #0088ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 TON MINER</h1>
+        <div class="price" id="price">$1.00</div>
+        <button onclick="clickTon()" id="clickBtn">НАКАЧАТЬ TON</button>
+        
+        <div class="stats">
+            <p>Баланс: <span id="balance">0</span> TON</p>
+            <p>Хешрейт: <span id="hashrate">1</span> GH/s</p>
+            <p>Уровень: <span id="level">1</span></p>
+        </div>
+        
+        <div class="upgrade" onclick="buyUpgrade('gpu')">
+            💻 Видеокарта (+5 GH/s)<br>
+            <small>Цена: <span id="gpuPrice">50</span> TON</small>
+        </div>
+        
+        <div class="upgrade" onclick="buyUpgrade('farm')">
+            🌐 Майнинг-ферма (+25 GH/s авто)<br>
+            <small>Цена: <span id="farmPrice">250</span> TON</small>
+        </div>
+        
+        <button onclick="tg.shareUrl(window.location.href, 'Играй в TON Miner!')" style="background:linear-gradient(45deg, #00cc88, #00ffaa);">
+            👥 Пригласить друга
+        </button>
+    </div>
+
+    <script>
+        // Telegram Web App
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+        
+        // Игра
+        let game = {
+            price: 1.00,
+            balance: 0,
+            hashrate: 1,
+            level: 1,
+            upgrades: { gpu: 0, farm: 0 }
+        };
+        
+        // Загрузка из Telegram Cloud
+        tg.CloudStorage.getItem('game', (err, data) => {
+            if (data) game = JSON.parse(data);
+            updateUI();
+        });
+        
+        function clickTon() {
+            game.price += 0.01 + (game.upgrades.gpu * 0.003);
+            game.balance += game.hashrate;
+            updateUI();
+            saveGame();
+        }
+        
+        function buyUpgrade(type) {
+            const prices = { gpu: 50, farm: 250 };
+            const price = prices[type] * Math.pow(1.2, game.upgrades[type]);
+            
+            if (game.balance >= price) {
+                game.balance -= price;
+                game.upgrades[type]++;
+                if (type === 'gpu') game.hashrate += 5;
+                updateUI();
+                saveGame();
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+        }
+        
+        function updateUI() {
+            document.getElementById('price').textContent = '$' + game.price.toFixed(2);
+            document.getElementById('balance').textContent = Math.floor(game.balance);
+            document.getElementById('hashrate').textContent = game.hashrate;
+            document.getElementById('level').textContent = game.level;
+            document.getElementById('gpuPrice').textContent = Math.floor(50 * Math.pow(1.2, game.upgrades.gpu));
+            document.getElementById('farmPrice').textContent = Math.floor(250 * Math.pow(1.2, game.upgrades.farm));
+        }
+        
+        function saveGame() {
+            tg.CloudStorage.setItem('game', JSON.stringify(game));
+        }
+        
+        // Авто-добыча
+        setInterval(() => {
+            if (game.upgrades.farm > 0) {
+                game.balance += game.upgrades.farm * 25;
+                updateUI();
+                saveGame();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
