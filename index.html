@@ -1,132 +1,248 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TON Miner Game</title>
+    <title>TON Miner</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background: #0a0a0a; color: white; padding: 20px; text-align: center; }
-        .container { max-width: 400px; margin: 0 auto; }
-        h1 { color: #00ffff; margin: 20px 0; font-size: 2em; }
-        .price { font-size: 48px; color: #00ff88; margin: 20px 0; font-weight: bold; }
-        .btn { width: 100%; padding: 20px; font-size: 24px; background: linear-gradient(45deg, #ff0088, #8800ff); color: white; border: none; border-radius: 15px; margin: 10px 0; cursor: pointer; }
-        .stats { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin: 15px 0; text-align: left; }
-        .upgrade { background: rgba(0,100,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0; border: 1px solid #0088ff; text-align: left; cursor: pointer; }
-        .notification { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #00ff88; color: #003311; padding: 15px; border-radius: 10px; font-weight: bold; display: none; }
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(30, 30, 46, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+        }
+        
+        h1 {
+            color: #00ffff;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .price {
+            font-size: 60px;
+            color: #00ff88;
+            font-weight: bold;
+            margin: 30px 0;
+            text-shadow: 0 0 15px #00ff88;
+            transition: transform 0.3s;
+        }
+        
+        .main-btn {
+            background: linear-gradient(45deg, #ff0088, #8800ff);
+            color: white;
+            border: none;
+            padding: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+            transition: transform 0.2s;
+            box-shadow: 0 8px 20px rgba(255, 0, 136, 0.4);
+        }
+        
+        .main-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 1.2em;
+        }
+        
+        .upgrade {
+            background: rgba(0, 100, 255, 0.2);
+            border: 2px solid #0088ff;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+        }
+        
+        .upgrade:hover {
+            background: rgba(0, 100, 255, 0.4);
+            transform: translateX(5px);
+        }
+        
+        .upgrade-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #88ccff;
+        }
+        
+        .upgrade-price {
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #003311;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🚀 TON MINER</h1>
         <div class="price" id="price">$1.00</div>
-        <button class="btn" onclick="clickTon()" id="clickBtn">НАКАЧАТЬ TON</button>
+        
+        <button class="main-btn" onclick="clickTon()" id="clickBtn">
+            🚀 НАКАЧАТЬ TON
+        </button>
         
         <div class="stats">
             <p>💰 Баланс: <span id="balance">0</span> TON</p>
             <p>⚡ Хешрейт: <span id="hashrate">1</span> GH/s</p>
             <p>🎯 Уровень: <span id="level">1</span></p>
+            <p>👥 Друзей: <span id="friends">0</span></p>
         </div>
         
         <div class="upgrade" onclick="buyUpgrade('gpu')">
-            <strong>💻 Видеокарта</strong><br>
-            <small>+1 GH/s | Цена: <span id="gpuPrice">50</span> TON</small>
+            <div class="upgrade-name">💻 Видеокарта</div>
+            <div>+5 GH/s, +0.3% к цене</div>
+            <div class="upgrade-price">Цена: <span id="gpuPrice">50</span> TON</div>
         </div>
         
         <div class="upgrade" onclick="buyUpgrade('farm')">
-            <strong>🌐 Майнинг-ферма</strong><br>
-            <small>Авто-добыча | Цена: <span id="farmPrice">250</span> TON</small>
+            <div class="upgrade-name">🌐 Майнинг-ферма</div>
+            <div>+25 GH/s авто-добычи</div>
+            <div class="upgrade-price">Цена: <span id="farmPrice">250</span> TON</div>
         </div>
         
-        <button class="btn" onclick="shareGame()" style="background:linear-gradient(45deg, #00cc88, #00ffaa);">
-            👥 Пригласить друга
+        <button class="main-btn" onclick="shareGame()" style="background: linear-gradient(45deg, #00cc88, #00ffaa); margin-top: 30px;">
+            👥 ПРИГЛАСИТЬ ДРУГА
         </button>
     </div>
-
+    
     <div class="notification" id="notification"></div>
 
     <script>
-        // Простая игра без Telegram (начнём с этого)
+        // ============ ПРОСТАЯ ИГРА ============
+        console.log('🎮 Игра запускается...');
+        
         let game = {
             price: 1.00,
             balance: 0,
             hashrate: 1,
             level: 1,
-            upgrades: { gpu: 0, farm: 0 },
-            totalClicks: 0
+            friends: 0,
+            upgrades: {
+                gpu: 0,
+                farm: 0
+            }
         };
         
-        // Загрузка из localStorage
-        function loadGame() {
-            const saved = localStorage.getItem('tonGame');
-            if (saved) {
-                try {
-                    game = JSON.parse(saved);
-                    updateUI();
-                    if (game.upgrades.farm > 0) startAutoFarm();
-                } catch(e) {
-                    console.log('Ошибка загрузки, начинаем заново');
-                }
-            }
-        }
-        
         // Показать уведомление
-        function showNotification(text) {
+        function showNotification(text, isError = false) {
             const notif = document.getElementById('notification');
             notif.textContent = text;
+            notif.style.background = isError ? '#ff4444' : '#00ff88';
+            notif.style.color = isError ? 'white' : '#003311';
             notif.style.display = 'block';
-            setTimeout(() => notif.style.display = 'none', 2000);
+            
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 2000);
         }
         
         // Основной клик
         function clickTon() {
-            game.totalClicks++;
-            game.price += 0.01 + (game.upgrades.gpu * 0.003);
-            game.balance += game.hashrate;
+            // Увеличиваем цену
+            let increase = 0.01;
+            increase += game.upgrades.gpu * 0.003; // Бонус от GPU
+            game.price += increase;
             
-            // Случайный памп
-            if (Math.random() < 0.05) {
-                game.price *= 1.1;
-                showNotification('📈 Памп! +10% к цене!');
-            }
+            // Добываем TON
+            game.balance += game.hashrate;
             
             updateUI();
             saveGame();
             
             // Анимация
-            document.getElementById('clickBtn').style.transform = 'scale(0.95)';
-            setTimeout(() => document.getElementById('clickBtn').style.transform = 'scale(1)', 100);
+            const priceElement = document.getElementById('price');
+            priceElement.style.transform = 'scale(1.1)';
+            setTimeout(() => priceElement.style.transform = 'scale(1)', 100);
+            
+            // Случайный памп
+            if (Math.random() < 0.05) {
+                game.price *= 1.1;
+                showNotification('📈 ПАМП! Цена +10%!');
+            }
+            
+            console.log('🖱️ Клик! Цена:', game.price.toFixed(2));
         }
         
         // Покупка улучшений
         function buyUpgrade(type) {
-            const basePrice = type === 'gpu' ? 50 : 250;
-            const count = game.upgrades[type];
-            const price = Math.floor(basePrice * Math.pow(1.2, count));
+            let price = 0;
+            let message = '';
             
-            if (game.balance >= price) {
-                game.balance -= price;
-                game.upgrades[type]++;
-                
-                if (type === 'gpu') {
+            if (type === 'gpu') {
+                price = Math.floor(50 * Math.pow(1.2, game.upgrades.gpu));
+                if (game.balance >= price) {
+                    game.balance -= price;
+                    game.upgrades.gpu++;
                     game.hashrate += 5;
-                    showNotification('💻 Видеокарта куплена! +5 GH/s');
-                } else if (type === 'farm') {
-                    showNotification('🌐 Ферма куплена! Запущена авто-добыча');
+                    message = '💻 Видеокарта куплена! +5 GH/s';
+                }
+            } else if (type === 'farm') {
+                price = Math.floor(250 * Math.pow(1.3, game.upgrades.farm));
+                if (game.balance >= price) {
+                    game.balance -= price;
+                    game.upgrades.farm++;
+                    message = '🌐 Ферма куплена! Запущена авто-добыча';
                     startAutoFarm();
                 }
-                
+            }
+            
+            if (message) {
+                showNotification(message);
                 updateUI();
                 saveGame();
-            } else {
-                showNotification(`❌ Нужно ещё ${price - game.balance} TON`);
+            } else if (price > 0 && game.balance < price) {
+                showNotification(`❌ Нужно ещё ${Math.ceil(price - game.balance)} TON`, true);
             }
         }
         
         // Авто-ферма
         let autoFarmInterval;
         function startAutoFarm() {
-            if (autoFarmInterval) clearInterval(autoFarmInterval);
+            if (autoFarmInterval) {
+                clearInterval(autoFarmInterval);
+            }
             
             autoFarmInterval = setInterval(() => {
                 if (game.upgrades.farm > 0) {
@@ -143,34 +259,73 @@
             document.getElementById('balance').textContent = Math.floor(game.balance);
             document.getElementById('hashrate').textContent = game.hashrate;
             document.getElementById('level').textContent = game.level;
+            document.getElementById('friends').textContent = game.friends;
             document.getElementById('gpuPrice').textContent = Math.floor(50 * Math.pow(1.2, game.upgrades.gpu));
             document.getElementById('farmPrice').textContent = Math.floor(250 * Math.pow(1.3, game.upgrades.farm));
         }
         
-        // Сохранение
-        function saveGame() {
-            localStorage.setItem('tonGame', JSON.stringify(game));
-        }
-        
-        // Поделиться
+        // Поделиться игрой
         function shareGame() {
             const url = window.location.href;
             const text = `🎮 Я играю в TON Miner! Уже на $${game.price.toFixed(2)}!`;
             
             if (navigator.share) {
-                navigator.share({ title: 'TON Miner', text: text, url: url });
+                navigator.share({
+                    title: 'TON Miner',
+                    text: text,
+                    url: url
+                });
             } else {
                 navigator.clipboard.writeText(url);
-                showNotification('📋 Ссылка скопирована!');
+                showNotification('📋 Ссылка скопирована! Отправь другу.');
+            }
+        }
+        
+        // Сохранение
+        function saveGame() {
+            try {
+                localStorage.setItem('tonMinerGame', JSON.stringify(game));
+            } catch(e) {
+                console.log('Не удалось сохранить:', e);
+            }
+        }
+        
+        // Загрузка
+        function loadGame() {
+            try {
+                const saved = localStorage.getItem('tonMinerGame');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data) {
+                        game = data;
+                        console.log('💾 Игра загружена');
+                    }
+                }
+            } catch(e) {
+                console.log('Ошибка загрузки, начинаем новую игру');
             }
         }
         
         // Запуск игры
-        window.addEventListener('DOMContentLoaded', () => {
+        function initGame() {
+            console.log('🎯 Инициализация игры...');
             loadGame();
             updateUI();
+            
+            // Запускаем авто-ферму если есть
+            if (game.upgrades.farm > 0) {
+                startAutoFarm();
+            }
+            
             showNotification('🎮 Игра загружена! Удачи!');
-        });
+            console.log('✅ Игра готова!');
+        }
+        
+        // Запускаем когда страница загрузится
+        window.addEventListener('DOMContentLoaded', initGame);
+        
+        // На всякий случай - запуск через 1 секунду
+        setTimeout(initGame, 1000);
     </script>
 </body>
 </html>
