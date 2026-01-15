@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TON Miner - Telegram</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(30, 30, 46, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+        }
+        
+        h1 {
+            color: #00ffff;
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .price {
+            font-size: 60px;
+            color: #00ff88;
+            font-weight: bold;
+            margin: 30px 0;
+            text-shadow: 0 0 15px #00ff88;
+            transition: transform 0.3s;
+        }
+        
+        .main-btn {
+            background: linear-gradient(45deg, #ff0088, #8800ff);
+            color: white;
+            border: none;
+            padding: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+            transition: transform 0.2s;
+            box-shadow: 0 8px 20px rgba(255, 0, 136, 0.4);
+        }
+        
+        .main-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 1.2em;
+        }
+        
+        .tg-btn {
+            background: linear-gradient(45deg, #0088cc, #0066aa);
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .tg-btn.ton {
+            background: linear-gradient(45deg, #ffcc00, #ff9900);
+        }
+        
+        .tg-btn.share {
+            background: linear-gradient(45deg, #00cc88, #00ffaa);
+        }
+        
+        .player-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 TON MINER</h1>
+        <div class="player-info">
+            <div>👤 Игрок: <span id="playerName">Загрузка...</span></div>
+            <div>💰 Баланс: <span id="balance">0</span> TON</div>
+        </div>
+        
+        <div class="price" id="price">$1.00</div>
+        
+        <button class="main-btn" onclick="clickTon()">
+            🚀 НАКАЧАТЬ TON
+        </button>
+        
+        <div class="stats">
+            <p>⚡ Хешрейт: <span id="hashrate">1</span> GH/s</p>
+            <p>📈 Рост: +<span id="growth">0.01</span>/клик</p>
+            <p>👥 Друзей: <span id="friends">0</span></p>
+        </div>
+        
+        <button class="tg-btn ton" onclick="buyTon()">
+            💰 КУПИТЬ TON
+        </button>
+        
+        <button class="tg-btn share" onclick="shareGame()">
+            👥 ПРИГЛАСИТЬ ДРУГА
+        </button>
+        
+        <button class="tg-btn" onclick="dailyBonus()">
+            🎁 ЕЖЕДНЕВНЫЙ БОНУС
+        </button>
+        
+        <div style="margin-top: 30px; font-size: 0.9em; color: #88aaff;">
+            Игра сохранена в вашем Telegram аккаунте
+        </div>
+    </div>
+
+    <script>
+        // ============ TELEGRAM ============
+        let tg = window.Telegram.WebApp;
+        
+        // Инициализация Telegram
+        tg.expand();
+        tg.ready();
+        tg.enableClosingConfirmation();
+        
+        // Показываем имя пользователя
+        const user = tg.initDataUnsafe.user;
+        if (user) {
+            document.getElementById('playerName').textContent = user.first_name || 'Игрок';
+        }
+        
+        // ============ ИГРА ============
+        let game = {
+            price: 1.00,
+            balance: 0,
+            hashrate: 1,
+            friends: 0
+        };
+        
+        // Загрузка из Telegram Cloud
+        tg.CloudStorage.getItem('tonGame', (err, data) => {
+            if (data) {
+                try {
+                    game = JSON.parse(data);
+                    updateUI();
+                } catch(e) {
+                    console.log('Ошибка загрузки');
+                }
+            }
+        });
+        
+        // Клик
+        function clickTon() {
+            game.price += 0.01;
+            game.balance += game.hashrate;
+            updateUI();
+            saveGame();
+            
+            // Анимация
+            document.getElementById('price').style.transform = 'scale(1.1)';
+            setTimeout(() => document.getElementById('price').style.transform = 'scale(1)', 100);
+        }
+        
+        // Покупка TON
+        function buyTon() {
+            tg.showPopup({
+                title: 'Купить TON',
+                message: 'Выберите количество:',
+                buttons: [
+                    {id: 'buy100', type: 'default', text: '100 TON - 0.5 TON'},
+                    {id: 'buy500', type: 'default', text: '500 TON - 2 TON'},
+                    {type: 'cancel'}
+                ]
+            }, (btnId) => {
+                if (btnId === 'buy100') {
+                    game.balance += 100;
+                    tg.showAlert('✅ Куплено 100 TON!');
+                    updateUI();
+                    saveGame();
+                } else if (btnId === 'buy500') {
+                    game.balance += 500;
+                    tg.showAlert('✅ Куплено 500 TON!');
+                    updateUI();
+                    saveGame();
+                }
+            });
+        }
+        
+        // Поделиться
+        function shareGame() {
+            const url = window.location.href;
+            const text = '🎮 Качай TON до луны в TON Miner! Присоединяйся!';
+            
+            tg.shareUrl(url, text, (shared) => {
+                if (shared) {
+                    game.friends++;
+                    game.balance += 100;
+                    tg.showAlert('🎉 +100 TON за друга!');
+                    updateUI();
+                    saveGame();
+                }
+            });
+        }
+        
+        // Ежедневный бонус
+        function dailyBonus() {
+            const today = new Date().toDateString();
+            const lastBonus = localStorage.getItem('lastBonus');
+            
+            if (lastBonus !== today) {
+                const bonus = 100;
+                game.balance += bonus;
+                localStorage.setItem('lastBonus', today);
+                tg.showAlert(`🎁 Ежедневный бонус: ${bonus} TON!`);
+                updateUI();
+                saveGame();
+            } else {
+                tg.showAlert('🎁 Бонус уже получен сегодня! Завтра будет новый.');
+            }
+        }
+        
+        // Обновление UI
+        function updateUI() {
+            document.getElementById('price').textContent = '$' + game.price.toFixed(2);
+            document.getElementById('balance').textContent = Math.floor(game.balance);
+            document.getElementById('hashrate').textContent = game.hashrate;
+            document.getElementById('friends').textContent = game.friends;
+        }
+        
+        // Сохранение в Telegram Cloud
+        function saveGame() {
+            tg.CloudStorage.setItem('tonGame', JSON.stringify(game));
+        }
+    </script>
+</body>
+</html>
